@@ -11,7 +11,7 @@
     --gray-dark-color: #5c6b60;
     --gray-light-color: #e2e5e3;
 
-    --radius: 8px;
+    --radius: 10px;
     --space: 1.5rem;
 }
 
@@ -49,8 +49,7 @@ nav {
     gap: 1.25rem;
 }
 #logo-id {
-    margin: 0 auto;
-    width: 5%;
+    width: 2.5rem;
     padding: .5em;
     margin: .1em auto .1em 0;
     border-radius: .25em;
@@ -69,7 +68,7 @@ nav {
     background-color: var(--accent-color-1);
     color: var(--white-color);
     padding: 0.4rem 1rem;
-    border-radius: --radius;
+    border-radius: var(--radius);
     text-decoration: none;
     font-weight: bold;
 }
@@ -87,7 +86,7 @@ main {
 /* banner */
 .banner img {
     width: 100%;
-    border-radius: --radius;
+    border-radius: var(--radius);
     max-height: 320px;
     object-fit: cover;
 }
@@ -96,13 +95,13 @@ main {
 .destacados {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 2rem;
+    gap: var(--space);
     margin: 2rem 0;
 }
 .listado-preview, .ave-del-dia {
     background-color: var(--secondary-color);
     border: 1.5px solid var(--gray-light-color);
-    border-radius: 8px;
+    border-radius: var(--radius);
     padding: 1.5rem;
 }
 .listado-preview h2, .listado-preview p,
@@ -115,7 +114,7 @@ main {
 .accesos {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
+    gap: var(--space);
     margin: 2rem 0;
 }
 .accesos h2, .accesos p {
@@ -125,7 +124,7 @@ main {
 .accesos article {
     background-color: var(--secondary-color);
     color: var(--black-color);
-    border-radius: 8px;
+    border-radius: var(--radius);
     padding: 1.5rem;
     text-align: center;
 }
