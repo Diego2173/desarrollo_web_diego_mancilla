@@ -5,6 +5,8 @@
 
     --primary-color: #2f5233;
     --secondary-color: #6b9b6e;
+    --secondary-color-2: #5a835d;
+
     --accent-color-1: #e6772e;
     --accent-color-2: #cf611f;
 
@@ -13,6 +15,15 @@
 
     --radius: 10px;
     --space: 1.5rem;
+
+    --h1-font-size: 2rem; 
+    --h2-font-size: 1.3rem;
+    --h3-font-size: 1.15rem;
+    --p-font-size: 0.9rem;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 /* Body */
@@ -21,6 +32,7 @@ body {
     color: var(--black-color);
     margin: 0;
     background-color: var(--white-color);
+    line-height: 1.5;
 }
 
 /* Header */
@@ -30,13 +42,15 @@ header {
     padding: 1rem 2rem;
 }
 header h1 {
-    margin-top: 1.5rem;
-    font-size: 2rem;
+    margin-top: 2rem;
+    font-size: var(--h1-font-size);
     font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 header p {
-    color: var(--white-color);
-    margin-top: 0.25rem;
+    color: #f7fdfaDD;
+    margin-top: -0.5rem;
 }
 
 
@@ -47,12 +61,15 @@ nav {
     justify-content: flex-end;
     align-items: center;
     gap: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f7fdfa26;
 }
 #logo-id {
-    width: 2.5rem;
-    padding: .5em;
-    margin: .1em auto .1em 0;
+    width: 4rem;
+    padding: 0.5em;
+    margin: 0.1em auto 0.1em 0;
     border-radius: .25em;
+    filter: brightness(0) invert(1);
 }
 .navbar-page {
     color: var(--white-color);
@@ -60,7 +77,9 @@ nav {
     font-size: 1rem;
     transition: opacity 0.2s ease;
 }
+
 .navbar-page:hover {
+    color: var(--gray-light-color);
     opacity: 0.85;
     text-decoration: underline;
 }
@@ -73,6 +92,7 @@ nav {
     font-weight: bold;
 }
 .navbar-login:hover {
+    color: var(--gray-light-color);
     text-decoration: underline;
     background-color: var(--accent-color-2);
 }
@@ -98,17 +118,47 @@ main {
     gap: var(--space);
     margin: 2rem 0;
 }
-.listado-preview, .ave-del-dia {
+.listado-preview {
     background-color: var(--secondary-color);
-    border: 1.5px solid var(--gray-light-color);
+    border: 1.5px solid var(--secondary-color-2);
+    border-left: 5px solid var(--secondary-color-2);
+    border-top: 3px solid var(--secondary-color-2);
     border-radius: var(--radius);
     padding: 1.5rem;
+    transition: box-shadow 0.2s ease;
 }
-.listado-preview h2, .listado-preview p,
-.ave-del-dia h2, .ave-del-dia p {
+.ave-del-dia {
+    background-color: var(--accent-color-1);
+    border: 1.5px solid var(--accent-color-2);
+    border-left: 5px solid var(--accent-color-2);
+    border-top: 3px solid var(--accent-color-2);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: box-shadow 0.2s ease;
+}
+.listado-preview h2, .ave-del-dia h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: var(--h2-font-size);
     font-family: 'Poppins', sans-serif;
     color: var(--white-color);
 }
+ .listado-preview p, ave-del-dia p {
+    font-family: 'Poppins', sans-serif;
+    color: var(--white-color);
+ }
+.listado-preview a, .listado-preview a {
+    color: var(--white-color);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
+}
+.listado-preview a:hover, .listado-preview a:hover {
+    color: var(--gray-light-color);
+    opacity: 0.85;
+    text-decoration: underline;
+}
+
 
 /* accesos: listado-preview, .ave-del-dia */
 .accesos {
@@ -117,17 +167,28 @@ main {
     gap: var(--space);
     margin: 2rem 0;
 }
-.accesos h2, .accesos p {
+.accesos h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: var(--h3-font-size);
+    font-family: 'Poppins', sans-serif;
+    color: var(--white-color);
+}
+.accesos p {
     font-family: 'Poppins', sans-serif;
     color: var(--white-color);
 }
 .accesos article {
     background-color: var(--secondary-color);
     color: var(--black-color);
+    border: 1.5px solid var(--secondary-color-2);
+    border-left: 5px solid var(--secondary-color-2);
+    border-top: 3px solid var(--secondary-color-2);
     border-radius: var(--radius);
     padding: 1.5rem;
     text-align: center;
 }
+
 .accesos a {
     display: block;
     margin-top: 0.75rem;
