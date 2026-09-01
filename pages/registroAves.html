@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+    <!-- head-->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Informar Avistamiento - Avistamiento de Aves</title>
+        <link rel="stylesheet" type="text/css" href="../css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/form.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&family=Roboto&display=swap" rel="stylesheet">
+    </head>
+    
+    <!-- body-->
+    <body>
+        <!-- header-->
+        <header>
+            <!-- navbar-->
+            <nav>
+                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"/> <!-- source de logo: https://svglogogenerator.com/?id=6f4251d0-d188-4d2e-b0a3-a40d4e3cbf73-->
+                <a class="navbar-page" href="../index.html">Inicio</a>
+                <a class="navbar-page" href="registroVoluntarios.html">Registrarme</a>    <!-- Registro de Voluntarios-->
+                <a class="navbar-page" href="registroAves.html">Informar Avistamiento</a> <!-- Informar Avistamiento de Aves-->
+                <a class="navbar-page" href="listadoAves.html">Listado de Aves</a>        <!-- Listado de Aves-->
+                <a class="navbar-page" href="estadisticas.html">Estadísticas</a>          <!-- Estadísticas-->
+                <a class="navbar-login" href="login.html">Login</a>                       <!-- Login-->
+            </nav>
+
+            <h1>Informar Avistamiento</h1>
+            <p>Comparte tu observación</p>
+        </header>
+
+        <!-- main-->
+        <main>
+            <!-- container-->
+            <div class="container">
+                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"/>
+                <p>Detalles del avistamiento</p>
+            
+                <!-- form-->
+                <form id="formRegistroAves" method="post" enctype="multipart/form-data">
+
+                    <!-- Tipo de ave-->
+                    <div class="field">
+                        <label for="bird-type">Tipo de Ave</label>
+                        <input type="text" id="bird-type" minlength="4" required><br>
+                        <span class="error-message" id="bird-type-error">El Tipo de</span>
+                    </div>
+
+                    <!-- Nombre de ave -->
+                    <div class="field">
+                        <label for="bird-name">Nombre de ave</label>
+                        <input type="text" id="bird-name" minlength="10" required><br>
+                        <span class="error-message" id="bird-name-error">Escribe el nombre de la ave</span>
+                    </div>
+
+                    <!-- Lugar-->
+                    <!-- Región-->
+                    <div class="select-field">
+                        <label for="select-region">Región</label>
+                        <select id="select-region" required>
+                            <option value="">Seleccione la región</option>
+                        </select>
+                        <span class="error-message" id="region-error">Seleccione una región</span>
+                    </div>
+                    <!-- Comuna-->
+                    <div class="select-field">
+                        <label for="select-comuna">Comuna</label>
+                        <select id="select-comuna" required>
+                            <option value="">Seleccione la comuna</option>
+                        </select>
+                        <span class="error-message" id="comuna-error">Seleccione una comuna</span>
+                    </div>
+                    <!-- (Opcional) Dirección adicional-->
+                    <div class="field">
+                        <label for="address">Dirección adicional</label>
+                        <input type="text" id="address" minlength="10" required><br>
+                        <span class="error-message" id="direccion-error">No se admite una dirección tan corta</span>
+                    </div>
+
+                    <!-- Fecha y hora-->
+                    <div class="field">
+                        <label for="date">Fecha del avistamiento</label>
+                        <input type="date" id="date" required>
+                        <span class="error-message" id="date-error">La fecha no puede ser futura ni muy antigua (máximo 10 años atrás).</span>
+                    </div>
+                    <div class="field">
+                        <label for="time">Hora del avistamiento</label>
+                        <input type="time" id="time" required>
+                        <span class="error-message" id="time-error">Se necesita una hora</span>
+                    </div>
+
+                     <button id="submit-btn-aves" type="button">Enviar</button>
+                </form>
+            </div>
+        </main>
+
+        <!-- TODO 0x: Definir Footer-->
+        <!-- footer-->
+        <footer>
+        </footer>
+
+        <!-- Scripts-->
+        <script src="../js/registroAves/validation.js"></script>
+        <script src="../js/registroAves/select.js"></script>
+    </body>
+</html>
