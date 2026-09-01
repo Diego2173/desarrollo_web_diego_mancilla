@@ -44,19 +44,19 @@
                     <!-- Nombre-->
                     <div class="field">
                         <label for="name">Nombre</label>
-                        <input type="text" id="name" minlength="2" requiered><br>
+                        <input type="text" id="name" minlength="2" required><br>
                         <span class="error-message" id="name-error">El nombre es obligatorio</span>
                     </div>
                     <div class="field">
                         <label for="lastname">Apellido</label>
-                        <input type="text" id="lastname" minlength="2" requiered><br>
+                        <input type="text" id="lastname" minlength="2" required><br>
                         <span class="error-message" id="lastname-error">El apellido es obligatorio</span>
                     </div>
 
                     <!-- Email-->
                     <div class="field">
                         <label for="email">Email</label>
-                        <input type="email" id="email" minlength="10" requiered><br>
+                        <input type="email" id="email" minlength="10" required><br>
                         <span class="error-message" id="email-error">Ingresa un correo válido</span>
                     </div>
 
@@ -73,7 +73,7 @@
                     <!-- Número telefónico-->
                     <div class="field">
                         <label for="phone">Teléfono</label>
-                        <input type="text" id="phone" minlength="8" requiered><br>
+                        <input type="text" id="phone" minlength="8" required><br>
                         <span class="error-message" id="phone-error">Ingresa un teléfono válido</span>
                     </div>
                     
@@ -83,13 +83,13 @@
                     <div class="select-field">
                         <label for="select-region">Región</label>
                         <select id="select-region" required>
-                            <option value="">Seleccione su región?</option>
+                            <option value="">Seleccione su región</option>
                         </select><br>
                         <span class="error-message" id="region-error">Seleccione una región</span>
                     </div>
                     <!-- Comuna-->
                     <div class="select-field">
-                        <label for="select-comuna">Región</label>
+                        <label for="select-comuna">Comuna</label>
                         <select id="select-comuna" required>
                             <option value="">Seleccione su comuna</option>
                         </select><br>
@@ -97,9 +97,9 @@
                     </div>
                     <!-- Dirección-->
                     <div class="field">
-                        <label for="Adress">Dirección</label>
-                        <input type="text" id="adress" minlength="10" requiered><br>
-                        <span class="error-message" id="adress-error">???</span>
+                        <label for="Address">Dirección</label>
+                        <input type="text" id="address" minlength="10" required><br>
+                        <span class="error-message" id="address-error">La dirección es muy corta</span>
                     </div>
 
                      <button id="submit-btn-voluntarios" type="button">Enviar</button>
@@ -113,7 +113,7 @@
         </footer>
 
         <!-- Scripts-->
-        <script src="../js/registroVoluntarios.js"></script>
-        <script src="../js/data.js"></script>
+        <script src="../js/registroVoluntarios/validation.js"></script>
+        <script src="../js/registroVoluntarios/select.js"></script>
     </body>
 </html>
