@@ -88,7 +88,12 @@
                     <div class="field">
                         <label for="time">Hora del avistamiento</label>
                         <input type="time" id="time" required>
-                        <span class="error-message" id="time-error">Se necesita una hora</span>
+                        <span class="error-message" id="time-error">Se necesita una hora de avistamiento</span>
+                    </div>
+                    <div class="file-field">
+                        <label for="file">Fecha del avistamiento</label>
+                        <input type="file" id="file" accept="image/*, video/*" required>
+                        <span class="error-message" id="file-error">Debes seleccionar al menos un archivo</span>
                     </div>
 
                      <button id="submit-btn-aves" type="button">Enviar</button>
