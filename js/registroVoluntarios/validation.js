@@ -3,6 +3,7 @@ const regexMap = {
     text: /^[\p{L}]+(?:[  "-][\p{L}]+)*$/u,
     mail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     phone: /^[0-9]+(?:[ -][0-9]+)*$/,
+    address: /^[a-zA-Z0-9\s.,\-#°ñÑáéíóúÁÉÍÓÚ]+$/u,
 };
 
 // función para validar un campo en el cual se puede escribir mediante una expresión regular y restricciones de longitud
@@ -26,11 +27,9 @@ const validateType = (type) => {
 
 const setFieldStyle = (input, isValid) => {
     if (isValid) {
-        input.style.borderColor = "";
-        input.style.border = "";
+        input.classList.remove("error");
     } else {
-        input.style.borderColor = "red";
-        input.style.border = "2px solid red";
+        input.clastList.add("error");
     }
 };
 
@@ -65,7 +64,7 @@ const validateForm = () => {
     let phoneNumberValid = validateField(phoneNumberInput.value, regexMap.phone, 8, 15);
     let regionValid      = validateType(regionInput.value);
     let comunaValid      = validateType(comunaInput.value);
-    let addressValid     = validateField(addressInput.value, regexMap.text, 0, 100);
+    let addressValid     = validateField(addressInput.value, regexMap.address, 0, 100);
 
     // Hacer visible span de error
     const setInvalidInput = (errorSpan, input, isValid) => {
@@ -89,7 +88,7 @@ const validateForm = () => {
     if (!isValid) {
         return;
     } else {
-        window.location.href = "registroExitoso.html"   
+        window.location.href = "../pages/registroExitoso.html"   
     };
 };
 

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Registro de voluntarios - Avistamiento de Aves</title>
         <link rel="stylesheet" type="text/css" href="../css/index.css">
-        <link rel="stylesheet" type="text/css" href="css/form.css">
+        <link rel="stylesheet" type="text/css" href="../css/form.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&family=Roboto&display=swap" rel="stylesheet">
@@ -35,8 +35,7 @@
         <main>
             <!-- container-->
             <div class="container">
-                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"/>
-                <p>Regístrate como voluntario</p>
+                <h2>Regístrate como voluntario</h2>
             
                 <!-- form-->
                 <form id="formRegistroVoluntario" method="post" enctype="multipart/form-data">
@@ -62,47 +61,54 @@
 
                     
                     <!-- Teléfono-->
-                    <!-- Código telefónico-->
-                    <div class="select-field">
-                        <label for="select-phone-code">Teléfono</label>
-                        <select id="select-phone-code" required>
-                            <option value="">+56 9</option>
-                        </select>
-                        <span class="error-message" id="phone-code-error">Seleccione un código</span>
-                    </div>
-                    <!-- Número telefónico-->
                     <div class="field">
-                        <label for="phone"></label>
-                        <input type="text" id="phone" minlength="8" required><br>
-                        <span class="error-message" id="phone-error">Ingresa un teléfono válido</span>
+                        <label for="phone">Teléfono</label>
+                        <div class="phone-group">
+
+                            <!-- Código telefónico-->
+                            <div class="select-field">
+                                <select id="select-phone-code" required>
+                                    <option value="">+56</option>
+                                </select>
+                                <span class="error-message" id="phone-code-error">Seleccione un código</span>
+                            </div>
+
+                            <!-- Número telefónico-->
+                            <div class="field">
+                                <input type="text" id="phone" minlength="8" required><br>
+                                <span class="error-message" id="phone-error">Ingresa un teléfono válido</span>
+                            </div>
+                        </div>
                     </div>
-                    
 
                     <!-- Dirección personal-->
-                    <!-- Región-->
-                    <div class="select-field">
-                        <label for="select-region">Región</label>
-                        <select id="select-region" required>
-                            <option value="">Seleccione su región</option>
-                        </select><br>
-                        <span class="error-message" id="region-error">Seleccione una región</span>
-                    </div>
-                    <!-- Comuna-->
-                    <div class="select-field">
-                        <label for="select-comuna">Comuna</label>
-                        <select id="select-comuna" required>
-                            <option value="">Seleccione su comuna</option>
-                        </select><br>
-                        <span class="error-message" id="comuna-error">Seleccione una comuna</span>
-                    </div>
-                    <!-- Dirección-->
-                    <div class="field">
-                        <label for="address">Dirección</label>
-                        <input type="text" id="address" minlength="10" required><br>
-                        <span class="error-message" id="address-error">La dirección es muy corta</span>
-                    </div>
+                    <div class="address-group">
+                        <span class="group-label">Dirección <span class="required-mark">*</span></span>
+                        <div class="address-row">
+                            <!-- Región -->
+                            <div class="select-field">
+                                <select id="select-region" required>
+                                    <option value="">Región</option>
+                                </select>
+                                <span class="error-message" id="region-error">Seleccione región</span>
+                            </div>
 
-                     <button id="submit-btn-voluntarios" type="button">Enviar</button>
+                            <!-- Comuna -->
+                            <div class="select-field">
+                                <select id="select-comuna" required>
+                                    <option value="">Comuna</option>
+                                </select>
+                                <span class="error-message" id="comuna-error">Seleccione comuna</span>
+                            </div>
+
+                            <!-- Dirección -->
+                            <div class="field">
+                                <input type="text" id="address" minlength="10" required>
+                                <span class="error-message" id="address-error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="submit-btn-voluntarios" type="submit">Enviar</button>
                 </form>
             </div>
         </main>
