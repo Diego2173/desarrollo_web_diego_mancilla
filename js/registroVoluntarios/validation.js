@@ -5,7 +5,6 @@ const regexMap = {
     phone: /^[0-9]+(?:[ -][0-9]+)*$/,
 };
 
-
 // función para validar un campo en el cual se puede escribir mediante una expresión regular y restricciones de longitud
 const validateField = (value, re, minLength = 0, maxLength = 100) => {
 
@@ -17,27 +16,37 @@ const validateField = (value, re, minLength = 0, maxLength = 100) => {
     let lengthValid = trimmed.length >= minLength && trimmed.length <= maxLength;
 
     return formatValid && lengthValid;
-}
+};
 
 // Función para validar que un campo de tipo select no tenga el valor por defecto (placeholder)
 const validateType = (type) => {
     if (!type) return false;
     return true
-}
+};
+
+const setFieldStyle = (input, isValid) => {
+    if (isValid) {
+        input.style.borderColor = "";
+        input.style.border = "";
+    } else {
+        input.style.borderColor = "red";
+        input.style.border = "2px solid red";
+    }
+};
 
 const validateForm = () => {
     // Referencia al formulario
     let form = document.getElementById("formRegistroVoluntario");
 
-    // Referencias a los campos del formulario
-    let name        = document.getElementById("name").value;
-    let lastname    =  document.getElementById("lastname").value;
-    let email       =  document.getElementById("email").value;
-    let phoneCode   =  document.getElementById("select-phone-code").value
-    let phoneNumber =  document.getElementById("phone").value;
-    let region      =  document.getElementById("select-region").value;
-    let comuna      =  document.getElementById("select-comuna").value;
-    let address     =  document.getElementById("address").value;
+    // Referencia a los campos del formulario
+    let nameInput        = document.getElementById("name");
+    let lastnameInput    = document.getElementById("lastname");
+    let emailInput       = document.getElementById("email");
+    let phoneCodeInput   = document.getElementById("select-phone-code");
+    let phoneNumberInput = document.getElementById("phone");
+    let regionInput      = document.getElementById("select-region");
+    let comunaInput      = document.getElementById("select-comuna");
+    let addressInput     = document.getElementById("address");
 
     // Obtener referencias a los spans de error
     let nameError        =  document.getElementById("name-error");
@@ -49,54 +58,40 @@ const validateForm = () => {
     let comunaError      =  document.getElementById("comuna-error");
     let addressError     =  document.getElementById("address-error");
 
-    let nameValid        = validateField(name, regexMap.text, 2, 32);
-    let lastnameValid    = validateField(lastname, regexMap.text, 2, 32);
-    let emailValid       = validateField(email, regexMap.mail, 10, 64);
-    let phoneCodeValid   = validateType(phoneCode);
-    let phoneNumberValid = validateField(phoneNumber, regexMap.phone, 8, 15);
-    let regionValid      = validateType(region);
-    let comunaValid      = validateType(comuna);
-    let addressValid     = validateField(address, regexMap.text, 0, 100);
+    let nameValid        = validateField(nameInput.value, regexMap.text, 2, 32);
+    let lastnameValid    = validateField(lastnameInput.value, regexMap.text, 2, 32);
+    let emailValid       = validateField(emailInput.value, regexMap.mail, 10, 64);
+    let phoneCodeValid   = validateType(phoneCodeInput.value);
+    let phoneNumberValid = validateField(phoneNumberInput.value, regexMap.phone, 8, 15);
+    let regionValid      = validateType(regionInput.value);
+    let comunaValid      = validateType(comunaInput.value);
+    let addressValid     = validateField(addressInput.value, regexMap.text, 0, 100);
 
     // Hacer visible span de error
-    const setInvalidInput = (errorSpan, isValid) => {
+    const setInvalidInput = (errorSpan, input, isValid) => {
         if (errorSpan) {
-            errorSpan.classList.toggle("visible", !isValid)
+            errorSpan.classList.toggle("visible", !isValid);
         }
+        setFieldStyle(input, isValid);
     };
 
-    setInvalidInput(nameError, nameValid);
-    setInvalidInput(lastnameError, lastnameValid);
-    setInvalidInput(emailError, emailValid);
-    setInvalidInput(phoneCodeError, phoneCodeValid);
-    setInvalidInput(phoneNumberError, phoneNumberValid);
-    setInvalidInput(regionError, regionValid);
-    setInvalidInput(comunaError, comunaValid);
-    setInvalidInput(addressError, addressValid);
+    setInvalidInput(nameError, nameInput, nameValid);
+    setInvalidInput(lastnameError, lastnameInput, lastnameValid);
+    setInvalidInput(emailError, emailInput, emailValid);
+    setInvalidInput(phoneCodeError, phoneCodeInput, phoneCodeValid);
+    setInvalidInput(phoneNumberError, phoneNumberInput, phoneNumberValid);
+    setInvalidInput(regionError, regionInput, regionValid);
+    setInvalidInput(comunaError, comunaInput, comunaValid);
+    setInvalidInput(addressError, addressInput, addressValid);
 
-    // Si hay un campo no válido, se queda hasta aquí el programa
+    // Si hay un campo no válido, detener
     const isValid = (nameValid && lastnameValid && emailValid && phoneCodeValid && phoneNumberValid && regionValid && comunaValid && addressValid) 
     if (!isValid) {
-        // lógica para señalar cuales son los campos inválidos
-
-        return false
+        return;
     } else {
-
-        // Limpiar formulario y los errores
-        form.reset();
-        setInvalidInput(nameError, true);
-        setInvalidInput(lastnameError, true);
-        setInvalidInput(emailError, true);
-        setInvalidInput(phoneCodeError, true);
-        setInvalidInput(phoneNumberError, true);
-        setInvalidInput(regionError, true);
-        setInvalidInput(comunaError, true);
-        setInvalidInput(addressError, true);
-
-        // llevar a página de éxito externa tal vez /pages/registroExitoso y de ahí redigir a index.html
-        // y guardar datos del usuario en local storage---
+        window.location.href = "registroExitoso.html"   
     };
-}
+};
 
 document.getElementById("formRegistroVoluntario").addEventListener("submit", (event) => {
     event.preventDefault();
