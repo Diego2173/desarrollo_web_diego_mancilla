@@ -28,7 +28,7 @@
 
 /* Body */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     color: var(--black-color);
     margin: 0;
     background-color: var(--white-color);
@@ -44,7 +44,7 @@ header {
 header h1 {
     margin-top: 2rem;
     font-size: var(--h1-font-size);
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 800;
     letter-spacing: -0.02em;
 }
@@ -140,11 +140,11 @@ main {
     margin-top: 0;
     margin-bottom: 0.75rem;
     font-size: var(--h2-font-size);
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white-color);
 }
  .listado-preview p, ave-del-dia p {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white-color);
  }
 .listado-preview a, .listado-preview a {
@@ -171,11 +171,11 @@ main {
     margin-top: 0;
     margin-bottom: 0.75rem;
     font-size: var(--h3-font-size);
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white-color);
 }
 .accesos p {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white-color);
 }
 .accesos article {

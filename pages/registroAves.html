@@ -44,7 +44,7 @@
                     <!-- Tipo de ave-->
                     <div class = "bird-group">
                         <!-- Tipo de ave-->
-                        <div class="field">
+                        <div class="select-field">
                             <label for="select-bird">Tipo de Ave</label>
                             <select id="select-bird" required>
                                 <option value="">Tipo</option>
@@ -82,7 +82,7 @@
 
                             <!-- Dirección -->
                             <div class="field">
-                                <input type="text" id="address" minlength="10" required>
+                                <input type="text" id="address" minlength="1" required>
                                 <span class="error-message" id="address-error"></span>
                             </div>
                         </div>
@@ -110,23 +110,19 @@
                     <div class="file-field">
                         <label for="file">Fotos o videos del avistamiento </label>
                         <input type="file" id="file" accept="image/*, video/*" multiple required>
-                        <span class="error-message" id="file-error">Debe seleccionar al menos un archivo</span>
+                        <span class="error-message" id="file-error">Debe seleccionar al menos un archivo de imagen o video</span>
                     </div>
 
                     <!-- Descripción adicional-->
                     <div class="field">
                         <label for="description">Descripción adicional (opcional)</label>
-                        <input type="text" id="description" minlength="0"><br>
+                        <textarea id="description" rows="5"></textarea>
                     </div>
-                     <button id="submit-btn-aves" type="submit">Enviar</button>
+                    
+                    <button id="submit-btn-aves" type="submit">Enviar</button>
                 </form>
             </div>
         </main>
-
-        <!-- TODO 0x: Definir Footer-->
-        <!-- footer-->
-        <footer>
-        </footer>
 
         <!-- Scripts-->
         <script src="../js/registroAves/validation.js"></script>

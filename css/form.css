@@ -12,14 +12,14 @@
     text-align: center;
     color: var(--accent-color-1);
     margin-bottom: 1.5rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 851;
 }
 
 /* Campos del formulario*/
 .field,
 .select-field,
-.file-field
+.file-field,
 .date-field {
     margin-bottom: 0.25rem;
 }
@@ -42,7 +42,7 @@
     width: 100%;
     padding: 0.6rem 0.8rem;
     font-size: 1rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     border: 2px solid var(--gray-light-color);
     border-radius: 6px;
     background-color: var(--white-color);
@@ -110,6 +110,27 @@
     width: 100%;
 }
 
+/* Tipo de ave, nombre de ave, fecha y hora*/
+.bird-group, .date-group {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+.bird-group .field, .date-group .field  {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Descripción */
+.field textarea {
+    min-height: 7rem;
+    max-height: 16rem;
+    resize: vertical;
+    overflow-y: auto;
+    font-family: "Roboto", sans-serif;
+}
+
 /* Mensajes de error*/
 .error-message {
     display: none;
@@ -131,7 +152,7 @@ button {
     padding: 0.75rem 1.5rem;
     font-size: 1.1rem;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     color: var(--white-color);
     background-color: var(--accent-color-1);
     border: none;

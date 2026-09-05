@@ -52,7 +52,7 @@ const validateDate = (dateStr, timeStr) => {
     // Fecha y hora actuales
     let now = new Date();
     let dateNow = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
-    
+
     // Calcular fecha límite -> hace 5 años (a la misma hora)
     let minDate = new Date(dateNow);
     minDate.setFullYear(minDate.getFullYear() - 5);
@@ -87,7 +87,7 @@ const validateFile = (files) => {
 
 const validateForm = () => {
     // Referencia al formulario
-    let form = document.getElementById("formRegistroVoluntario");
+    let form = document.getElementById("formRegistroAves");
 
     // Referencia a los campos del formulario
     let birdTypeInput    = document.getElementById("select-bird");
@@ -98,6 +98,7 @@ const validateForm = () => {
     let dateInput        = document.getElementById("date");
     let timeInput        = document.getElementById("time");
     let fileInput        = document.getElementById("file");
+    let descriptionInput = document.getElementById("description")
 
     // Obtener referencias a los spans de error
     let birdTypeError    = document.getElementById("select-bird-error");
@@ -106,16 +107,17 @@ const validateForm = () => {
     let comunaError      = document.getElementById("comuna-error");
     let addressError     = document.getElementById("address-error");
     let dateError        = document.getElementById("date-error");
-    let timeError        = document.getElementById("time-error");
     let fileError        = document.getElementById("file-error");
+    let descriptionError = document.getElementById("description-error");
 
     let birdTypeValid    = validateType(birdTypeInput.value);
     let birdNameValid    = validateField(birdNameInput.value, regexMap.text, 3, 50);
     let regionValid      = validateType(regionInput.value);
     let comunaValid      = validateType(comunaInput.value);
-    let addressValid     = validateField(addressInput.value, regexMap.address, 0, 100);
+    let addressValid     = validateField(addressInput.value, regexMap.address, 1, 100);
     let dateValid        = validateDate(dateInput.value, timeInput.value);
-    let fileValid        = validateFile(fileInput.value);
+    let fileValid        = validateFile(fileInput.files);
+    let descriptionValid = validateField(descriptionInput.value, regexMap.address, 0, 1000)
 
     // Hacer visible span de error
     const setInvalidInput = (errorSpan, input, isValid) => {
@@ -131,9 +133,8 @@ const validateForm = () => {
     setInvalidInput(comunaError, comunaInput, comunaValid);
     setInvalidInput(addressError, addressInput, addressValid);
     setInvalidInput(dateError, dateInput, dateValid);
-    setInvalidInput(timeError, timeInput, timeValid);
     setInvalidInput(fileError, fileInput, fileValid);
-
+    setInvalidInput(descriptionError, descriptionInput, descriptionValid);
 
     // Si hay un campo no válido, detener
     const isValid = (birdTypeValid && birdNameValid && regionValid && comunaValid && addressValid && dateValid && fileValid);
