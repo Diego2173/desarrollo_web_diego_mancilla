@@ -49,7 +49,7 @@
                             <select id="select-bird" required>
                                 <option value="">Tipo</option>
                             </select> 
-                            <span class="error-message" id="bird-type-error">Seleccione el tipo de ave</span>
+                            <span class="error-message" id="select-bird-error">Seleccione el tipo de ave</span>
                         </div>
 
                         <!-- Nombre de ave -->
@@ -95,7 +95,7 @@
                         <div class="field">
                             <label for="date">Fecha del avistamiento</label>
                             <input type="date" id="date" required>
-                            <span class="error-message" id="date-error">La fecha no puede ser futura ni muy antigua (máximo 10 años atrás).</span>
+                            <span class="error-message" id="date-error">La fecha no puede ser futura ni muy antigua (máximo 5 años atrás).</span>
                         </div>
 
                         <!-- Hora del avistamiento-->
@@ -109,7 +109,7 @@
                     <!-- Archivos-->
                     <div class="file-field">
                         <label for="file">Fotos o videos del avistamiento </label>
-                        <input type="file" id="file" accept="image/*, video/*" required>
+                        <input type="file" id="file" accept="image/*, video/*" multiple required>
                         <span class="error-message" id="file-error">Debe seleccionar al menos un archivo</span>
                     </div>
 

@@ -29,7 +29,7 @@ const setFieldStyle = (input, isValid) => {
     if (isValid) {
         input.classList.remove("error");
     } else {
-        input.clastList.add("error");
+        input.classList.add("error");
     }
 };
 
@@ -88,7 +88,7 @@ const validateForm = () => {
     if (!isValid) {
         return;
     } else {
-        window.location.href = "../pages/registroExitoso.html"   
+        window.location.href = "../pages/registroExitosoVoluntarios.html"   
     };
 };
 

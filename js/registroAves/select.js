@@ -1,3 +1,37 @@
+// Tipos de aves extraídas de https://ecologiaverde.elperiodico.com/clasificacion-de-las-aves-3548.html#anchor_1
+const tiposAves = [
+    "Passeriformes",
+    "Apodiformes",
+    "Piciformes",
+    "Psittaciformes",
+    "Columbiformes",
+    "Charadriiformes",
+    "Galliformes",
+    "Anseriformes",
+    "Falconiformes",
+    "Strigiformes",
+    "Pelecaniformes",
+    "Ciconiiformes",
+    "Sphenisciformes",
+    "Struthioniformes",
+    "Phoenicopteriformes",
+    "Casuariiformes",
+    "Gruiformes",
+    "Suliformes",
+    "Procellariiformes",
+    "Cuculiformes",
+    "Cathartiformes",
+    "Tinamiformes",
+    "Apterygiformes",
+    "Caprimulgiformes",
+    "Bucerotiformes",
+    "Coraciiformes",
+    "Podicipediformes",
+    "Rheiformes",
+    "Gaviiformes",
+    "Otro"
+];
+
 // Regiones y comunas extraídas de https://juanbrujo.github.io/chile-regiones-comunas/ y reformateadas como objecto javascript
 const regionesComunas = {
     "Arica y Parinacota":     ["Arica", "Camarones", "Putre", "General Lagos"],
@@ -17,6 +51,19 @@ const regionesComunas = {
     "Región de Aisén":        ["Coihaique", "Lago Verde", "Aisén", "Cisnes", "Guaitecas", "Cochrane", "O'Higgins", "Tortel", "Chile Chico", "Río Ibáñez"],
     "Región de Magallanes":   ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos (Ex Navarino)", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"],
 };
+
+
+function populateBirdType() {
+    const selectBirdType = document.getElementById("select-bird");
+    
+    selectBirdType.innerHTML = "";
+    tiposAves.forEach(bird => {
+        const option = document.createElement("option");
+        option.value = bird;
+        option.textContent = bird;
+        selectBirdType.appendChild(option);
+    });
+}
 
 const populateRegion = () => {
     let regionSelect = document.getElementById("select-region");
@@ -49,6 +96,7 @@ const updateComuna = () => {
 document.getElementById("select-region").addEventListener("change", updateComuna);
 
 window.onload = () => {
+    populateBirdType();
     populateRegion();
     populatePhoneCode();
 };
