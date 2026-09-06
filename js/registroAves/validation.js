@@ -32,7 +32,7 @@ const setFieldStyle = (input, isValid) => {
 };
 
 // Función para validar tiempo
-function validateTime(timeStr) {
+const validateTime = (timeStr) => {
     if (!timeStr) return false;
     
     let timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
