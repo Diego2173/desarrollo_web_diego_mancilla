@@ -52,7 +52,7 @@ const regionesComunas = {
     "Región de Magallanes":   ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos (Ex Navarino)", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"],
 };
 
- // Datos de países y códigos telefónicos extraídos de https://countrycode.org
+ // Códigos telefónicos extraídos de https://countrycode.org
 const codigosTelefonicos = [
     "+56",
     "+93", "+355", "+213", "+1-684", "+376", "+244", "+1-264", "+672",

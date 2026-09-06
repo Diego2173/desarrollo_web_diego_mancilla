@@ -35,22 +35,16 @@ const countBy = (list, key, byMonth = true) => {
         });
         return counts;
     } else {
-        const counts = {};
+        const counts = new Array(12).fill(0);
         list.forEach(item => {
-            const [year, month] = item.date.split("-"); // "2025-08-20" -> "2025", "08"
-            const key = `${year}-${month}`;
-            counts[key] = (counts[key] || 0) + 1;
+            const [, month] = item.date.split("-"); // "2025-08-20" -> "08"
+            const monthIndex = parseInt(month, 10) - 1;
+            counts[monthIndex]++;
         });
-    
-        // Ordenar cronológicamente las llaves "YYYY-MM"
-        const sortedKeys = Object.keys(counts).sort();
- 
-        const labels = sortedKeys.map(key => {
-            const [year, month] = key.split("-");
-            const nombreMes = nombresMeses[parseInt(month, 10) - 1];
-            return `${nombreMes} ${year}`;
-        });
-        const values = sortedKeys.map(key => counts[key]);
+        
+        const labels = nombresMeses;
+        const values = counts;
+        
         return {labels, values};
     };
 };
@@ -98,7 +92,7 @@ window.onload = () => {
         options: {
             responsive: true,
             plugins: {
-                legend: {position: "right"},
+                legend: {display: false},
             },
         },
     });
