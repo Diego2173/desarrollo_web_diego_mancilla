@@ -8,15 +8,15 @@
     border: 1px solid var(--gray-light-color);
     text-align: center;
 }
-.container h2 {
+.container h1 {
     color: var(--accent-color-1);
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 800;
     margin-bottom: 0.5rem;
 }
-.container h3 {
+.container h2 {
     color: var(--black-color);
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: var(--p-font-size);
     margin-bottom: 1.5rem;
@@ -25,7 +25,7 @@
     display: inline-block;
     padding: 0.75rem 1.5rem;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     text-decoration: none;
     border-radius: 8px;
     color: var(--white-color);

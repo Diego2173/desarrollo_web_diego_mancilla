@@ -173,6 +173,9 @@ main {
 .display h3 {
     display: none;
 }
+.accesos h2 {
+    display: none;
+}
 .accesos h3 {
     margin-top: 0;
     margin-bottom: 0.75rem;

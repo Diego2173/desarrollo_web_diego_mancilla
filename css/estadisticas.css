@@ -6,7 +6,7 @@
     margin-bottom: 2rem;
 }
 .indicator {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     border-radius: var(--radius);
     padding: 1.25rem;
     text-align: center;
