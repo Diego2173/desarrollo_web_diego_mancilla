@@ -18,8 +18,8 @@
         <header>
              <!-- navbar-->
             <nav>
-                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"/> <!-- source de logo: https://svglogogenerator.com/?id=6f4251d0-d188-4d2e-b0a3-a40d4e3cbf73-->
-                <a class="navbar-page" href="index.html">Inicio</a>
+                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"> <!-- source de logo: https://svglogogenerator.com/?id=6f4251d0-d188-4d2e-b0a3-a40d4e3cbf73-->
+                <a class="navbar-page" href="../index.html">Inicio</a>
                 <a class="navbar-page" href="registroVoluntarios.html">Registrarme</a>    <!-- Registro de Voluntarios-->
                 <a class="navbar-page" href="registroAves.html">Informar Avistamiento</a> <!-- Informar Avistamiento de Aves-->
                 <a class="navbar-page" href="listadoAves.html">Listado de Aves</a>        <!-- Listado de Aves-->
@@ -35,7 +35,7 @@
         <main>
 
             <!-- section: filtros y ordenamiento-->
-            <section class="filter">
+            <div class="filter">
                 <form>
                     <div class="field-filter">
                         <label for="bird-type-filter">Filtrar por tipo de Aves</label>
@@ -58,10 +58,10 @@
                         </select>
                     </div>
                 </form>
-            </section>
+            </div>
 
             <!-- section: tabla de resultados-->
-            <section class="results-table">
+            <div class="results-table">
                 <table>
                     <caption>Avistamiento registrados</caption>
                     <thead>
@@ -76,7 +76,7 @@
                     </thead>
                     <tbody id="results-table"></tbody>
                 </table>
-            </section>
+            </div>
 
             <!-- Paginación-->
             <nav class="paginacion">
@@ -85,7 +85,7 @@
                 <button id="btn-next" type="button">Siguiente</button>
             </nav>
         </main>
-        
+
         <!-- Scripts-->
         <script src="../js/dataConst.js"></script>
         <script src="../js/data.js"></script>

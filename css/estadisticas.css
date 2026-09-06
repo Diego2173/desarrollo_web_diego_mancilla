@@ -1,0 +1,47 @@
+/* Indicadores */
+.indicators {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space);
+    margin-bottom: 2rem;
+}
+.indicator {
+    background-color: var(--primary-color);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+}
+.indicator h2 {
+    margin: 0 0 0.4rem 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.8rem;
+    color: var(--white-color);
+}
+.indicator p {
+    margin: 0;
+    font-size: var(--p-font-size);
+    color: var(--white-color);
+}
+
+/* Gráficos */
+.graphs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space);
+}
+.graph-sightings-by-month, .graph-volunteers-regions {
+    background-color: var(--white-color);
+    border: 1px solid var(--gray-light-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+.graph-sightings-by-month h2, .graph-volunteers-regions h2 {
+    margin-top: 0;
+    font-size: var(--h3-font-size);
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-color);
+    text-align: center;
+}
+.graph-sightings-by-month canvas, .graph-volunteers-regions canvas {
+    max-height: 280px;
+}

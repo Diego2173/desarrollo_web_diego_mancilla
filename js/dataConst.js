@@ -86,3 +86,9 @@ const codigosTelefonicos = [
     "+971", "+44", "+598", "+998", "+678", "+379", "+58",
     "+84", "+681", "+967", "+260", "+263"
 ];
+
+// Nombre de los meses del año (para estadísticas.html)
+const nombresMeses = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];

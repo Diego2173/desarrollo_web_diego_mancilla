@@ -118,6 +118,9 @@ main {
     gap: var(--space);
     margin: 2rem 0;
 }
+.destacados h2 {
+    display: none;
+}
 .listado-preview {
     background-color: var(--secondary-color);
     border: 1.5px solid var(--secondary-color-2);
@@ -166,6 +169,9 @@ main {
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--space);
     margin: 2rem 0;
+}
+.display h3 {
+    display: none;
 }
 .accesos h3 {
     margin-top: 0;
