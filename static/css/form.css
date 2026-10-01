@@ -1,0 +1,168 @@
+/* Contenedores formulario */
+.container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--white-color);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px #EBEBEB;
+    border: 1px solid var(--gray-light-color);
+}
+.container h2 {
+    text-align: center;
+    color: var(--accent-color-1);
+    margin-bottom: 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 851;
+}
+
+/* Campos del formulario*/
+.field,
+.select-field,
+.file-field,
+.date-field {
+    margin-bottom: 0.25rem;
+}
+.field label,
+.select-field label,
+.file-field label,
+.date-field label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--black-color);
+    margin-bottom: 0.3rem;
+}
+.field input,
+.select-field select,
+.file-field input[type="file"],
+.date-field input[type="date"],
+.date-field input[type="time"],
+.field textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    border: 2px solid var(--gray-light-color);
+    border-radius: 6px;
+    background-color: var(--white-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+.field input:focus,
+.select-field select:focus,
+.file-field input[type="file"]:focus,
+.date-field input:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px #8ec492;
+}
+
+/* Estilo para campos inválidos */
+.field input.error,
+.select-field select.error,
+.date-field input.error,
+.field textarea.error {
+    border-color: var(--accent-color-1);
+    border-width: 2px;
+    background-color: #fff6f0;
+}
+
+/* Teléfono */
+.phone-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.phone-group .select-field {
+    flex: 0 0 120px;
+    margin-bottom: 0;
+}
+.phone-group .field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Dirección */
+.address-group {
+    margin-bottom: 1rem;
+}
+.address-group .group-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--black-color);
+    margin-bottom: 0.3rem;
+}
+.address-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+.address-row .select-field,
+.address-row .field {
+    flex: 1;
+    margin-bottom: 0;
+}
+.address-row .select-field select,
+.address-row .field input {
+    width: 100%;
+}
+
+/* Tipo de ave, nombre de ave, fecha y hora*/
+.bird-group, .date-group {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+.bird-group .field, .date-group .field  {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Descripción */
+.field textarea {
+    min-height: 7rem;
+    max-height: 16rem;
+    resize: vertical;
+    overflow-y: auto;
+    font-family: "Roboto", sans-serif;
+}
+
+/* Mensajes de error*/
+.error-message {
+    display: none;
+    color: var(--accent-color-1);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent-color-2);
+}
+.error-message.visible {
+    display: block;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    color: var(--white-color);
+    background-color: var(--accent-color-1);
+    border: none;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    background-color: var(--accent-color-2);
+}
+button:active {
+    transform: scale(0.98);
+}
