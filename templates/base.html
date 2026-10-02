@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Avistamiento de Aves en Chile{% endblock %}</title>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&family=Roboto&display=swap" rel="stylesheet">
+
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  <header>
+    <nav>
+      <img id="logo-id"
+           src="{{ url_for('static', filename='images/logo.svg') }}"
+           alt="Logo de Avistamiento de Aves en Chile">
+
+      <a class="navbar-page" href="{{ url_for('index') }}">Inicio</a>
+      <a class="navbar-page" href="{{ url_for('form_voluntarios') }}">Registrarme</a>
+      <a class="navbar-page" href="{{ url_for('form_aves') }}">Informar Avistamiento</a>
+      <a class="navbar-page" href="{{ url_for('listadoAves') }}">Listado de Aves</a>
+      <a class="navbar-page" href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+
+    {% block hero %}{% endblock %}
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/dataConst.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
