@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Informar Avistamiento{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+{% endblock %}
+
+{% block hero %}
+  <h1>Informar Avistamiento</h1>
+  <p>Comparte tu observación</p>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Detalles del avistamiento</h2>
+
+  {% if errores.db %}
+    <p class="error-message visible">{{ errores.db }}</p>
+  {% endif %}
+
+  <form id="formRegistroAves" method="post"
+        action="{{ url_for('new_avistamiento') }}"
+        enctype="multipart/form-data">
+
+    <!-- Voluntario (nuevo en T2, AVI-1) -->
+    <div class="field">
+      <label for="voluntario_id">Voluntario</label>
+      <select id="voluntario_id" name="voluntario_id" required>
+        <option value="">-- Seleccione --</option>
+        {% for v in voluntarios %}
+          {% set sel = (preseleccion|string == v.id|string)
+                       or (datos.get('voluntario_id')|string == v.id|string) %}
+          <option value="{{ v.id }}" {% if sel %}selected{% endif %}>
+            {{ v.nombre }} ({{ v.email }})
+          </option>
+        {% endfor %}
+      </select>
+      <span class="error-message {% if errores.voluntario_id %}visible{% endif %}"
+            id="voluntario-error">
+        {{ errores.voluntario_id or 'Seleccione un voluntario' }}
+      </span>
+    </div>
+
+    <!-- Grupo de ave -->
+    <div class="bird-group">
+      <!-- Ave (reemplaza Tipo + Nombre) -->
+      <div class="select-field">
+        <label for="ave_id">Ave</label>
+        <select id="ave_id" name="ave_id" required>
+          <option value="">-- Seleccione un ave --</option>
+          {% for a in aves %}
+            <option value="{{ a.id }}"
+              {% if datos.get('ave_id')|string == a.id|string %}selected{% endif %}>
+              {{ a.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+        <span class="error-message {% if errores.ave_id %}visible{% endif %}"
+              id="ave-error">
+          {{ errores.ave_id or 'Seleccione un ave' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Dirección del avistamiento -->
+    <div class="address-group">
+      <span class="group-label">Dirección de Avistamiento</span>
+      <div class="address-row">
+
+        <div class="select-field">
+          <select id="select-region" name="select-region" required>
+            <option value="">Región</option>
+            {% for r in regiones %}
+              <option value="{{ r.id }}"
+                {% if datos.get('select-region')|string == r.id|string %}selected{% endif %}>
+                {{ r.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+          <span class="error-message {% if errores['select-region'] %}visible{% endif %}"
+                id="region-error">
+            {{ errores['select-region'] or 'Seleccione región' }}
+          </span>
+        </div>
+
+        <div class="select-field">
+          <select id="select-comuna" name="select-comuna" required>
+            <option value="">Comuna</option>
+          </select>
+          <span class="error-message {% if errores['select-comuna'] %}visible{% endif %}"
+                id="comuna-error">
+            {{ errores['select-comuna'] or 'Seleccione comuna' }}
+          </span>
+        </div>
+
+        <div class="field">
+          <input type="text" id="address" name="address" minlength="1" required
+                 value="{{ datos.get('address','') }}">
+          <span class="error-message {% if errores.address %}visible{% endif %}"
+                id="address-error">
+            {{ errores.address or '' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fecha y hora -->
+    <div class="date-group">
+      <div class="field">
+        <label for="date">Fecha del avistamiento</label>
+        <input type="date" id="date" name="date" required
+               value="{{ datos.get('date','') }}">
+        <span class="error-message {% if errores.date %}visible{% endif %}"
+              id="date-error">
+          {{ errores.date or 'La fecha no puede ser futura ni tener más de 5 años.' }}
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="time">Hora del avistamiento</label>
+        <input type="time" id="time" name="time" required
+               value="{{ datos.get('time','') }}">
+        <span class="error-message {% if errores.date %}visible{% endif %}"
+              id="time-error">
+          {{ errores.date or 'Se necesita una hora de avistamiento' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Archivos -->
+    <div class="file-field">
+      <label for="file">Fotos o videos del avistamiento</label>
+      <input type="file" id="file" name="file"
+             accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime"
+             multiple required>
+      <span class="error-message {% if errores.file %}visible{% endif %}"
+            id="file-error">
+        {{ errores.file or 'Debe seleccionar al menos un archivo de imagen o video' }}
+      </span>
+    </div>
+
+    <!-- Descripción -->
+    <div class="field">
+      <label for="description">Descripción adicional (opcional, máx. 500)</label>
+      <textarea id="description" name="description" rows="5"
+                maxlength="500">{{ datos.get('description','') }}</textarea>
+      <span class="error-message {% if errores.description %}visible{% endif %}"
+            id="description-error">
+        {{ errores.description or '' }}
+      </span>
+    </div>
+
+    <button id="submit-btn-aves" type="submit">Enviar</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/registroAves/select.js') }}"></script>
+<script src="{{ url_for('static', filename='js/registroAves/validation.js') }}"></script>
+{% endblock %}
