@@ -1,7 +1,6 @@
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, BigInteger, String, ForeignKey, DateTime, Text
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-import json
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Text
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship,  joinedload, selectinload
 
 DB_HOST = "localhost"
 DB_PORT = 3306
@@ -17,22 +16,21 @@ SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 # --- Models ---
-
 # Model for Region:
 class Region(Base):
     __tablename__ = "region"
-    id      = Column(BigInteger, primary_key=True, autoincrement=True)
+    id     = Column(Integer, primary_key=True, autoincrement=True)
     nombre  = Column(String(200), nullable=False)
-    comunas = relationship(back_populates="region")
+    comunas = relationship("Comuna", back_populates="region")
 
 # Model for Comuna:
 class Comuna(Base):
     __tablename__ = "comuna"
     id          = Column(Integer, primary_key=True, autoincrement=True)
     nombre      = Column(String(200), nullable=False)
-    region_id   = Column(BigInteger, ForeignKey("region.id"), nullable=False)
-    region      = relationship(back_populates="comunas")
-    voluntarios = relationship(back_populates="comuna")
+    region_id   = Column(Integer, ForeignKey("region.id"), nullable=False)
+    region      = relationship("Region", back_populates="comunas")
+    voluntarios = relationship("Voluntario", back_populates="comuna")
 
 # Model for Voluntario:
 class Voluntario(Base):
@@ -43,15 +41,17 @@ class Voluntario(Base):
     telefono       = Column(String(15),  nullable=False)
     fecha_registro = Column(DateTime,    nullable=False)
     comuna_id      = Column(Integer, ForeignKey("comuna.id"), nullable=False)
-    comuna         = relationship(back_populates="voluntarios")
-    avistamientos  = relationship(back_populates="voluntario")
+    comuna         = relationship("Comuna", back_populates="voluntarios")
+    avistamientos  = relationship("Avistamiento", back_populates="voluntario")
+
 
 # Model for Ave:
 class Ave(Base):
     __tablename__ = "ave"
     id            = Column(Integer, primary_key=True, autoincrement=True)
     nombre        = Column(String(80), nullable=False)
-    avistamientos = relationship(back_populates="ave")
+    avistamientos = relationship("Avistamiento", back_populates="ave")
+
 
 # Model for Avistamiento:
 class Avistamiento(Base):
@@ -62,9 +62,10 @@ class Avistamiento(Base):
     fecha_hora    = Column(DateTime, nullable=False)
     lugar         = Column(String(200), nullable=False)
     descripcion   = Column(Text(500), nullable=True)
-    voluntario    = relationship(back_populates="avistamientos")
-    ave           = relationship(back_populates="avistamientos")
-    registros     = relationship(back_populates="avistamiento")
+    voluntario    = relationship("Voluntario", back_populates="avistamientos")
+    ave           = relationship("Ave", back_populates="avistamientos")
+    registros     = relationship("Registro", back_populates="avistamiento")
+
 
 # Model for Registro:
 class Registro(Base):
@@ -73,8 +74,12 @@ class Registro(Base):
     ruta_archivo   = Column(String(300), nullable=False)
     nombre_archivo = Column(String(300), nullable=False)
     avistamiento_id = Column(Integer, ForeignKey("avistamiento.id"), nullable=False)
-    avistamiento   = relationship(back_populates="registros")
-    
+    avistamiento   = relationship("Avistamiento", back_populates="registros")
+
+@property
+def es_video(self):
+    return self.ruta_archivo.lower().rsplit(".", 1)[-1] in ("mp4", "mov")
+
 # --- Database Functions ---
 # ------ get Functions ------
 def get_regiones():
@@ -162,12 +167,18 @@ def create_registro(avistamiento_id, ruta_archivo, nombre_archivo):
         session.close()
 
 # ------ Functions for data displaying -----
-def get_ultimos_avistamientos(n=2):
+
+def _con_relaciones(query):
+    return query.options(joinedload(Avistamiento.ave),
+                         joinedload(Avistamiento.voluntario),
+                         selectinload(Avistamiento.registros))
+
+def get_last_avistamientos(n=2):
     session = SessionLocal()
     try:
-        return (session.query(Avistamiento)
-                       .order_by(Avistamiento.id.desc())
-                       .limit(n).all())
+        return (_con_relaciones(session.query(Avistamiento))
+                .order_by(Avistamiento.id.desc())
+                .limit(n).all())
     finally:
         session.close()
         
@@ -182,24 +193,17 @@ def get_avistamientos_paginados(page=1, per_page=5):
     offset = (page - 1) * per_page
     session = SessionLocal()
     try:
-        return (session.query(Avistamiento)
-                       .order_by(Avistamiento.fecha_hora.desc())
-                       .limit(per_page).offset(offset).all())
+        return (_con_relaciones(session.query(Avistamiento))
+                .order_by(Avistamiento.fecha_hora.desc(), Avistamiento.id.desc())
+                .limit(per_page).offset(offset).all())
     finally:
         session.close()
 
 def get_avistamiento(id_):
     session = SessionLocal()
     try:
-        return session.get(Avistamiento, id_)
+        return (_con_relaciones(session.query(Avistamiento))
+                .filter(Avistamiento.id == id_).one_or_none())
+
     finally:
         session.close()
-        
-        
-def change_profile_picture(username, new_img):
-    session = SessionLocal()
-    user = session.query(Usuario).filter_by(username=username).first()
-    if user:
-        user.profile_image = new_img
-        session.commit()
-    session.close()
