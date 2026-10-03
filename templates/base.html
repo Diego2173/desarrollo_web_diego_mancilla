@@ -21,9 +21,9 @@
            alt="Logo de Avistamiento de Aves en Chile">
 
       <a class="navbar-page" href="{{ url_for('index') }}">Inicio</a>
-      <a class="navbar-page" href="{{ url_for('form_voluntarios') }}">Registrarme</a>
-      <a class="navbar-page" href="{{ url_for('form_aves') }}">Informar Avistamiento</a>
-      <a class="navbar-page" href="{{ url_for('listadoAves') }}">Listado de Aves</a>
+      <a class="navbar-page" href="{{ url_for('new_voluntario') }}">Registrarme</a>
+      <a class="navbar-page" href="{{ url_for('new_avistamiento') }}">Informar Avistamiento</a>
+      <a class="navbar-page" href="{{ url_for('listado') }}">Listado de Aves</a>
       <a class="navbar-page" href="{{ url_for('estadisticas') }}">Estadísticas</a>
     </nav>
 
@@ -34,7 +34,6 @@
     {% block content %}{% endblock %}
   </main>
 
-  <script src="{{ url_for('static', filename='js/dataConst.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>
