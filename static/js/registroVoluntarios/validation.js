@@ -85,14 +85,12 @@ const validateForm = () => {
 
     // Si hay un campo no válido, detener
     const isValid = (nameValid && lastnameValid && emailValid && phoneCodeValid && phoneNumberValid && regionValid && comunaValid && addressValid) 
-    if (!isValid) {
-        return;
-    } else {
-        window.location.href = "../pages/registroExitosoVoluntarios.html"   
-    };
+    return isValid
 };
 
 document.getElementById("formRegistroVoluntario").addEventListener("submit", (event) => {
-    event.preventDefault();
-    validateForm();
+    // Si hay algo que es inválido, se detiene el envío. Si no, se envía a Flask
+    if (!validateForm()) {
+        event.preventDefault();
+    }
 });
