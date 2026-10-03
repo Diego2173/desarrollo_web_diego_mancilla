@@ -23,25 +23,6 @@
         action="{{ url_for('new_avistamiento') }}"
         enctype="multipart/form-data">
 
-    <!-- Voluntario (nuevo en T2, AVI-1) -->
-    <div class="field">
-      <label for="voluntario_id">Voluntario</label>
-      <select id="voluntario_id" name="voluntario_id" required>
-        <option value="">-- Seleccione --</option>
-        {% for v in voluntarios %}
-          {% set sel = (preseleccion|string == v.id|string)
-                       or (datos.get('voluntario_id')|string == v.id|string) %}
-          <option value="{{ v.id }}" {% if sel %}selected{% endif %}>
-            {{ v.nombre }} ({{ v.email }})
-          </option>
-        {% endfor %}
-      </select>
-      <span class="error-message {% if errores.voluntario_id %}visible{% endif %}"
-            id="voluntario-error">
-        {{ errores.voluntario_id or 'Seleccione un voluntario' }}
-      </span>
-    </div>
-
     <!-- Grupo de ave -->
     <div class="bird-group">
       <!-- Ave (reemplaza Tipo + Nombre) -->

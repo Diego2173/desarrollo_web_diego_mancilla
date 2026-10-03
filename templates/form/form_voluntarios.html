@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro de Voluntarios{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+{% endblock %}
+
+{% block hero %}
+  <h1>Registro de Voluntarios</h1>
+  <p>¡Únete a la red más grande de observación de aves en Chile!</p>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Regístrate como voluntario</h2>
+
+  {% if errores.db %}
+    <p class="error-message visible">{{ errores.db }}</p>
+  {% endif %}
+
+  <form id="formRegistroVoluntario" method="post"
+        action="{{ url_for('new_voluntario') }}"
+        enctype="multipart/form-data">
+
+    <!-- Nombre -->
+    <div class="field">
+      <label for="name">Nombre</label>
+      <input type="text" id="name" name="name" minlength="2" required
+             value="{{ datos.get('name','') }}">
+      <span class="error-message {% if errores.name %}visible{% endif %}" id="name-error">
+        {{ errores.name or 'El nombre es obligatorio' }}
+      </span>
+    </div>
+
+    <!-- Apellido -->
+    <div class="field">
+      <label for="lastname">Apellido</label>
+      <input type="text" id="lastname" name="lastname" minlength="2" required
+             value="{{ datos.get('lastname','') }}">
+      <span class="error-message {% if errores.lastname %}visible{% endif %}" id="lastname-error">
+        {{ errores.lastname or 'El apellido es obligatorio' }}
+      </span>
+    </div>
+
+    <!-- Email -->
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" minlength="10" required
+             value="{{ datos.get('email','') }}">
+      <span class="error-message {% if errores.email %}visible{% endif %}" id="email-error">
+        {{ errores.email or 'Ingresa un correo válido' }}
+      </span>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="field">
+      <label for="phone">Teléfono</label>
+      <div class="phone-group">
+
+        <div class="select-field">
+          <select id="select-phone-code" name="select-phone-code" required>
+            <option value="">+56</option>
+          </select>
+          <span class="error-message {% if errores['select-phone-code'] %}visible{% endif %}"
+                id="phone-code-error">
+            {{ errores['select-phone-code'] or 'Seleccione un código' }}
+          </span>
+        </div>
+
+        <div class="field">
+          <input type="text" id="phone" name="phone" minlength="8" required
+                 value="{{ datos.get('phone','') }}">
+          <span class="error-message {% if errores.phone %}visible{% endif %}" id="phone-error">
+            {{ errores.phone or 'Ingresa un teléfono válido' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dirección -->
+    <div class="address-group">
+      <span class="group-label">Dirección</span>
+      <div class="address-row">
+
+        <div class="select-field">
+          <select id="select-region" name="select-region" required>
+            <option value="">Región</option>
+            {% for r in regiones %}
+              <option value="{{ r.id }}"
+                {% if datos.get('select-region')|string == r.id|string %}selected{% endif %}>
+                {{ r.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+          <span class="error-message {% if errores['select-region'] %}visible{% endif %}"
+                id="region-error">
+            {{ errores['select-region'] or 'Seleccione región' }}
+          </span>
+        </div>
+
+        <div class="select-field">
+          <select id="select-comuna" name="select-comuna" required>
+            <option value="">Comuna</option>
+          </select>
+          <span class="error-message {% if errores['select-comuna'] %}visible{% endif %}"
+                id="comuna-error">
+            {{ errores['select-comuna'] or 'Seleccione comuna' }}
+          </span>
+        </div>
+
+        <div class="field">
+          <input type="text" id="address" name="address" minlength="10"
+                 value="{{ datos.get('address','') }}">
+          <span class="error-message {% if errores.address %}visible{% endif %}"
+                id="address-error">
+            {{ errores.address or '' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <button id="submit-btn-voluntarios" type="submit">Enviar</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/registroVoluntarios/select.js') }}"></script>
+<script src="{{ url_for('static', filename='js/registroVoluntarios/validation.js') }}"></script>
+{% endblock %}
