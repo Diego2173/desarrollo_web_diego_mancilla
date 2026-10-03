@@ -1,94 +1,72 @@
-<!DOCTYPE html>
-<html lang="es">
-    <!-- head-->
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Avistamiento de Aves en Chile</title>
-        <link rel="stylesheet" type="text/css" href="../css/index.css">
-        <link rel="stylesheet" type="text/css" href="../css/listado.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&family=Roboto&display=swap" rel="stylesheet">
-    </head>
-    
-    <!-- body-->
-    <body>
-        <!-- header-->
-        <header>
-             <!-- navbar-->
-            <nav>
-                <img id="logo-id" src="../images/logo.svg" alt="Logo de Avistamiento de Aves en Chile"> <!-- source de logo: https://svglogogenerator.com/?id=6f4251d0-d188-4d2e-b0a3-a40d4e3cbf73-->
-                <a class="navbar-page" href="../index.html">Inicio</a>
-                <a class="navbar-page" href="registroVoluntarios.html">Registrarme</a>    <!-- Registro de Voluntarios-->
-                <a class="navbar-page" href="registroAves.html">Informar Avistamiento</a> <!-- Informar Avistamiento de Aves-->
-                <a class="navbar-page" href="listadoAves.html">Listado de Aves</a>        <!-- Listado de Aves-->
-                <a class="navbar-page" href="estadisticas.html">Estadísticas</a>          <!-- Estadísticas-->
-                <a class="navbar-login" href="login.html">Login</a>                       <!-- Login-->
-            </nav>
+{% extends 'base.html' %}
 
-            <h1>Avistamiento de Aves en Chile</h1>
-            <p>Registro de avistamientos de aves en Chile </p>
-        </header>
+{% block title %}Listado de Avistamientos{% endblock %}
 
-        <!-- main-->
-        <main>
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+{% endblock %}
 
-            <!-- section: filtros y ordenamiento-->
-            <div class="filter">
-                <form>
-                    <div class="field-filter">
-                        <label for="bird-type-filter">Filtrar por tipo de Aves</label>
-                        <select id="bird-type-filter">
-                            <option value="">Todos</option>
-                        </select>
-                    </div>
+{% block hero %}
+  <h1>Listado de Avistamientos</h1>
+  <p>Haz clic en un avistamiento para ver su detalle</p>
+{% endblock %}
 
-                    <div class="field-filter">
-                        <label for="order">Ordenar por</label>
-                        <select id="order">
-                            <option value="date-desc">Fecha (más reciente primero)</option>
-                            <option value="date-asc">Fecha (más antigua primero)</option>
-                            <option value="place-asc">Lugar (A-Z)</option>
-                            <option value="place-desc">Lugar (Z-A)</option>
-                            <option value="birdType-asc">Tipo de ave (A-Z)</option>
-                            <option value="birdType-desc">Tipo de ave (Z-A)</option>
-                            <option value="birdName-asc">Nombre de ave (A-Z)</option>
-                            <option value="birdName-desc">Nombre de ave (Z-A)</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
+{% block content %}
+  <div class="results-table">
+    <table>
+      <caption>Avistamientos registrados</caption>
+      <thead>
+        <tr>
+          <th scope="col">Ave</th>
+          <th scope="col">Lugar</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Voluntario</th>
+          <th scope="col">Registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in avistamientos %}
+          {% set fotos  = a.registros | rejectattr('es_video') | list | length %}
+          {% set videos = a.registros | selectattr('es_video') | list | length %}
+          <tr class="clickable-row" data-href="{{ url_for('detalle', aid=a.id, page=page) }}">
+            <td><a href="{{ url_for('detalle', aid=a.id, page=page) }}">{{ a.ave.nombre }}</a></td>
+            <td>{{ a.lugar }}</td>
+            <td>{{ a.fecha_hora.strftime('%d-%m-%Y') }}</td>
+            <td>{{ a.fecha_hora.strftime('%H:%M') }}</td>
+            <td>{{ a.voluntario.nombre }}</td>
+            <td>
+              {% if fotos %}<span class="badge badge-foto">{{ fotos }} {{ 'Foto' if fotos == 1 else 'Fotos' }}</span>{% endif %}
+              {% if videos %}<span class="badge badge-video">{{ videos }} {{ 'Video' if videos == 1 else 'Videos' }}</span>{% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="6">Aún no hay avistamientos registrados.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-            <!-- section: tabla de resultados-->
-            <div class="results-table">
-                <table>
-                    <caption>Avistamiento registrados</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Tipo de ave</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Lugar</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Hora</th>
-                            <th scope="col">Registro</th>
-                        </tr>
-                    </thead>
-                    <tbody id="results-table"></tbody>
-                </table>
-            </div>
+  <!-- Paginación -->
+  <nav class="paginacion" aria-label="Paginación del listado">
+    {% if page > 1 %}
+      <a class="page-btn" href="{{ url_for('listado', page=page - 1) }}">Anterior</a>
+    {% else %}
+      <span class="page-btn disabled">Anterior</span>
+    {% endif %}
 
-            <!-- Paginación-->
-            <nav class="paginacion">
-                <button id="btn-previous" type="button">Anterior</button>
-                <span id="page-number">Página 1 de 1</span>
-                <button id="btn-next" type="button">Siguiente</button>
-            </nav>
-        </main>
+    <span id="page-number">Página {{ page }} de {{ total_pages }}</span>
 
-        <!-- Scripts-->
-        <script src="../js/dataConst.js"></script>
-        <script src="../js/data.js"></script>
-        <script src="../js/listadoAves/listadoAves.js"></script>
-    </body>
-</html>
+    {% if page < total_pages %}
+      <a class="page-btn" href="{{ url_for('listado', page=page + 1) }}">Siguiente</a>
+    {% else %}
+      <span class="page-btn disabled">Siguiente</span>
+    {% endif %}
+  </nav>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/listadoAves/listadoAves.js') }}"></script>
+{% endblock %}

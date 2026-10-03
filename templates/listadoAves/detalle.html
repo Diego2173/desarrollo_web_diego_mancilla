@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ a.ave.nombre }} — Detalle del avistamiento{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+{% endblock %}
+
+{% block hero %}
+  <h1>{{ a.ave.nombre }}</h1>
+  <p>Detalle del avistamiento</p>
+{% endblock %}
+
+{% block content %}
+  <section class="detalle">
+    <dl class="detalle-datos">
+      <div>
+        <dt>Ave</dt>
+        <dd>{{ a.ave.nombre }}</dd>
+      </div>
+      <div>
+        <dt>Lugar</dt>
+        <dd>{{ a.lugar }}</dd>
+      </div>
+      <div>
+        <dt>Fecha</dt>
+        <dd>{{ a.fecha_hora.strftime('%d-%m-%Y') }}</dd>
+      </div>
+      <div>
+        <dt>Hora</dt>
+        <dd>{{ a.fecha_hora.strftime('%H:%M') }}</dd>
+      </div>
+      <div>
+        <dt>Informado por</dt>
+        <dd>{{ a.voluntario.nombre }}</dd>
+      </div>
+    </dl>
+
+    <h2>Descripción</h2>
+    <p class="detalle-descripcion">
+      {% if a.descripcion %}{{ a.descripcion }}{% else %}Sin descripción adicional.{% endif %}
+    </p>
+
+    <h2>Fotos y videos</h2>
+    {% if a.registros %}
+      <ul class="galeria">
+        {% for r in a.registros %}
+          <li>
+            {% if r.es_video %}
+              <video controls preload="metadata" src="{{ url_for('static', filename=r.ruta_archivo) }}">
+                Tu navegador no puede reproducir este video.
+              </video>
+            {% else %}
+              <a href="{{ url_for('static', filename=r.ruta_archivo) }}" target="_blank" rel="noopener">
+                <img src="{{ url_for('static', filename=r.ruta_archivo) }}"
+                     alt="Foto de {{ a.ave.nombre }} ({{ r.nombre_archivo }})">
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Este avistamiento no tiene archivos adjuntos.</p>
+    {% endif %}
+
+    <p><a class="volver" href="{{ url_for('listado', page=page) }}">Volver al listado</a></p>
+  </section>
+{% endblock %}
