@@ -1,6 +1,3 @@
-/**
- * Basicamente 
- */
 const regionSelect = document.getElementById("select-region");
 const comunaSelect = document.getElementById("select-comuna");
 
