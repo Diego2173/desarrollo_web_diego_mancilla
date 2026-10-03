@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro exitoso - Avistamiento de Aves{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registroExitoso.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Tu registro fue exitoso</h1>
+    <h2>¡Se ha añadido tu avistamiento de {{ aves.nombre }} a los registros!</h2>
+
+    <div class="acciones">
+      <a class="secundario" href="{{ url_for('index', ok='ave') }}">Ir al inicio</a>
+    </div>
+  </div>
+{% endblock %}

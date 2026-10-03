@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro exitoso - Avistamiento de Aves{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registroExitoso.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Tu registro fue exitoso</h1>
+    <h2>¡Bienvenido/a, {{ voluntario.nombre }}! Ya formas parte de la red de voluntarios de la Unión de Ornitólogos de Chile.</h2>
+
+    <div class="acciones">
+      <a href="{{ url_for('new_avistamiento', voluntario_id=voluntario.id) }}">Registrar un avistamiento</a>
+      <a class="secundario" href="{{ url_for('index', ok='voluntario') }}">Ir al inicio</a>
+    </div>
+  </div>
+{% endblock %}
