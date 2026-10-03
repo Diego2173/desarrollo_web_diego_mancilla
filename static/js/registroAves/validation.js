@@ -66,7 +66,7 @@ const validateFile = (files) => {
 
     // Extensiones válidas de archivos
     let extensionValid = [
-        "image/jpeg", "image/png", "image/webp",
+        "image/jpeg", "image/png", "image/webp", "image/gif",
         "video/mp4", "video/quicktime"
     ];
 
@@ -146,6 +146,7 @@ const validateForm = () => {
 };
 
 document.getElementById("formRegistroAves").addEventListener("submit", (event) => {
-    event.preventDefault();
-    validateForm();
+    if (!validateForm()) {
+        event.preventDefault();
+    }
 });
