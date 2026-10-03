@@ -211,3 +211,15 @@ main {
 .accesos a:hover {
     background-color: var(--accent-color-2);
 }
+
+/* Mensaje de éxito (registro de voluntario / avistamiento) */
+.ok-message {
+    background-color: #e4f3e5;
+    border: 1.5px solid var(--secondary-color-2);
+    border-left: 5px solid var(--primary-color);
+    border-radius: var(--radius);
+    color: var(--primary-color);
+    font-weight: 700;
+    padding: 0.9rem 1.25rem;
+    margin: 0 0 1.5rem 0;
+}

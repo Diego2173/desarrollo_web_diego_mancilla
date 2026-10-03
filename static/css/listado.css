@@ -86,3 +86,125 @@
     font-weight: 300;
     color: var(--black-color);
 }
+
+/* Filas clickables del listado */
+.clickable-row {
+    cursor: pointer;
+}
+.results-table td a {
+    color: var(--primary-color);
+    font-weight: 700;
+    text-decoration: none;
+}
+.results-table td a:hover {
+    text-decoration: underline;
+}
+ 
+/* Insignias de registro (foto / video) */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    margin: 0.1rem 0.15rem 0.1rem 0;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--white-color);
+}
+.badge-foto {
+    background-color: var(--secondary-color-2);
+}
+.badge-video {
+    background-color: var(--accent-color-2);
+}
+ 
+/* Botones de paginación (son enlaces, no botones) */
+.page-btn {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--white-color);
+    background-color: var(--accent-color-1);
+    border-radius: 8px;
+}
+a.page-btn:hover {
+    background-color: var(--accent-color-2);
+}
+.page-btn.disabled {
+    background-color: var(--gray-light-color);
+    color: var(--gray-dark-color);
+    cursor: not-allowed;
+}
+ 
+/* Detalle del avistamiento */
+.detalle h2 {
+    font-family: "Poppins", sans-serif;
+    font-size: var(--h2-font-size);
+    color: var(--primary-color);
+    margin-top: 2rem;
+}
+.detalle-datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 0;
+}
+.detalle-datos div {
+    background-color: var(--white-color);
+    border: 1px solid var(--gray-light-color);
+    border-left: 5px solid var(--secondary-color-2);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+}
+.detalle-datos dt {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gray-dark-color);
+}
+.detalle-datos dd {
+    margin: 0.2rem 0 0 0;
+    font-size: 1.05rem;
+}
+.detalle-descripcion {
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+.galeria {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.galeria img,
+.galeria video {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-light-color);
+    background-color: var(--black-color);
+}
+.volver {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.6rem 1.25rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--white-color);
+    background-color: var(--accent-color-1);
+    border-radius: 8px;
+}
+.volver:hover {
+    background-color: var(--accent-color-2);
+}
+ 
+/* En pantallas angostas la tabla se desplaza dentro de su contenedor, no la página completa */
+.results-table {
+    overflow-x: auto;
+}

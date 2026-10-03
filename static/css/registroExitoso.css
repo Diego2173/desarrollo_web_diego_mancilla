@@ -35,3 +35,17 @@
 .container a:hover {
     background-color: var(--accent-color-2);
 }
+
+/* Botones de la página de registro exitoso */
+.container .acciones {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+.container a.secundario {
+    background-color: var(--secondary-color-2);
+}
+.container a.secundario:hover {
+    background-color: var(--primary-color);
+}
