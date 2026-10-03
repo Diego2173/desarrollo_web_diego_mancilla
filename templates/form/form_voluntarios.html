@@ -37,7 +37,7 @@
     <div class="field">
       <label for="lastname">Apellido</label>
       <input type="text" id="lastname" name="lastname" minlength="2" required
-             value="{{ datos.get('lastname','') }}">
+             data-selected="{{ datos.get('select-phone-code', '+56') }}">
       <span class="error-message {% if errores.lastname %}visible{% endif %}" id="lastname-error">
         {{ errores.lastname or 'El apellido es obligatorio' }}
       </span>
@@ -100,7 +100,8 @@
         </div>
 
         <div class="select-field">
-          <select id="select-comuna" name="select-comuna" required>
+          <select id="select-comuna" name="select-comuna" required
+                  data-selected="{{ datos.get('select-comuna', '') }}">
             <option value="">Comuna</option>
           </select>
           <span class="error-message {% if errores['select-comuna'] %}visible{% endif %}"
@@ -125,7 +126,13 @@
 </div>
 {% endblock %}
 
-{% block scripts %}
 <script src="{{ url_for('static', filename='js/registroVoluntarios/select.js') }}"></script>
 <script src="{{ url_for('static', filename='js/registroVoluntarios/validation.js') }}"></script>
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dataConst.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comunas.js') }}"></script>
+<script src="{{ url_for('static', filename='js/registroVoluntarios/select.js') }}"></script>
+<script src="{{ url_for('static', filename='js/registroVoluntarios/validation.js') }}"></script>
+
 {% endblock %}
