@@ -23,9 +23,12 @@
         action="{{ url_for('new_avistamiento') }}"
         enctype="multipart/form-data">
 
+    
     <!-- Grupo de ave -->
     <div class="bird-group">
-      <!-- Ave (reemplaza Tipo + Nombre) -->
+
+
+      <!-- Ave -->
       <div class="select-field">
         <label for="ave_id">Ave</label>
         <select id="ave_id" name="ave_id" required>
@@ -40,6 +43,23 @@
         <span class="error-message {% if errores.ave_id %}visible{% endif %}"
               id="ave-error">
           {{ errores.ave_id or 'Seleccione un ave' }}
+        </span>
+      </div>
+
+      <div class="select-field">
+        <label for="voluntario_id">Voluntario</label>
+        <select id="voluntario_id" name="voluntario_id" required>
+          <option value="">-- Seleccione un voluntario --</option>
+          {% for v in voluntarios %}
+            <option value="{{ v.id }}"
+              {% if (datos.get('voluntario_id') or preseleccion)|string == v.id|string %}selected{% endif %}>
+              {{ v.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+        <span class="error-message {% if errores.voluntario_id %}visible{% endif %}"
+              id="voluntario-error">
+          {{ errores.voluntario_id or 'Seleccione un voluntario' }}
         </span>
       </div>
     </div>
@@ -66,7 +86,8 @@
         </div>
 
         <div class="select-field">
-          <select id="select-comuna" name="select-comuna" required>
+          <select id="select-comuna" name="select-comuna" required
+              data-selected="{{ datos.get('select-comuna', '') }}">
             <option value="">Comuna</option>
           </select>
           <span class="error-message {% if errores['select-comuna'] %}visible{% endif %}"
@@ -138,6 +159,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/registroAves/select.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comunas.js') }}"></script>
 <script src="{{ url_for('static', filename='js/registroAves/validation.js') }}"></script>
 {% endblock %}
