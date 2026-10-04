@@ -76,9 +76,9 @@ class Registro(Base):
     avistamiento_id = Column(Integer, ForeignKey("avistamiento.id"), nullable=False)
     avistamiento   = relationship("Avistamiento", back_populates="registros")
 
-@property
-def es_video(self):
-    return self.ruta_archivo.lower().rsplit(".", 1)[-1] in ("mp4", "mov")
+    @property
+    def es_video(self):
+        return self.ruta_archivo.lower().rsplit(".", 1)[-1] in ("mp4", "mov")
 
 # --- Database Functions ---
 # ------ get Functions ------
