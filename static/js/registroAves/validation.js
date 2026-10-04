@@ -90,8 +90,8 @@ const validateForm = () => {
     let form = document.getElementById("formRegistroAves");
 
     // Referencia a los campos del formulario
-    let birdTypeInput    = document.getElementById("select-bird");
-    let birdNameInput    = document.getElementById("bird-name");
+    let voluntarioInput  = document.getElementById("voluntario_id");
+    let aveInput         = document.getElementById("ave_id");
     let regionInput      = document.getElementById("select-region");
     let comunaInput      = document.getElementById("select-comuna");
     let addressInput     = document.getElementById("address");
@@ -101,8 +101,8 @@ const validateForm = () => {
     let descriptionInput = document.getElementById("description")
 
     // Obtener referencias a los spans de error
-    let birdTypeError    = document.getElementById("select-bird-error");
-    let birdNameError    = document.getElementById("bird-name-error");
+    let voluntarioError  = document.getElementById("voluntario-error");
+    let aveError         = document.getElementById("ave-error");
     let regionError      = document.getElementById("region-error");
     let comunaError      = document.getElementById("comuna-error");
     let addressError     = document.getElementById("address-error");
@@ -110,14 +110,14 @@ const validateForm = () => {
     let fileError        = document.getElementById("file-error");
     let descriptionError = document.getElementById("description-error");
 
-    let birdTypeValid    = validateType(birdTypeInput.value);
-    let birdNameValid    = validateField(birdNameInput.value, regexMap.text, 3, 50);
+    let voluntarioValid  = validateType(voluntarioInput.value);
+    const aveValid       = validateType(aveInput.value);
     let regionValid      = validateType(regionInput.value);
     let comunaValid      = validateType(comunaInput.value);
     let addressValid     = validateField(addressInput.value, regexMap.address, 1, 100);
     let dateValid        = validateDate(dateInput.value, timeInput.value);
     let fileValid        = validateFile(fileInput.files);
-    let descriptionValid = validateField(descriptionInput.value, regexMap.address, 0, 1000)
+    let descriptionValid = validateField(descriptionInput.value, regexMap.address, 0, 500)
 
     // Hacer visible span de error
     const setInvalidInput = (errorSpan, input, isValid) => {
@@ -127,8 +127,8 @@ const validateForm = () => {
         setFieldStyle(input, isValid);
     };
 
-    setInvalidInput(birdTypeError, birdTypeInput, birdTypeValid);
-    setInvalidInput(birdNameError, birdNameInput, birdNameValid);
+    setInvalidInput(voluntarioError, voluntarioInput, voluntarioValid);
+    setInvalidInput(aveError, aveInput, aveValid);
     setInvalidInput(regionError, regionInput, regionValid);
     setInvalidInput(comunaError, comunaInput, comunaValid);
     setInvalidInput(addressError, addressInput, addressValid);
@@ -136,13 +136,8 @@ const validateForm = () => {
     setInvalidInput(fileError, fileInput, fileValid);
     setInvalidInput(descriptionError, descriptionInput, descriptionValid);
 
-    // Si hay un campo no válido, detener
-    const isValid = (birdTypeValid && birdNameValid && regionValid && comunaValid && addressValid && dateValid && fileValid);
-    if (!isValid) {
-        return;
-    } else {
-        window.location.href = "../pages/registroExitosoAves.html"   
-    };
+    return (voluntarioValid && aveValid && regionValid && comunaValid &&
+            addressValid && dateValid && fileValid && descriptionValid);
 };
 
 document.getElementById("formRegistroAves").addEventListener("submit", (event) => {
