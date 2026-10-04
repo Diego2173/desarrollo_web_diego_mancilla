@@ -20,8 +20,7 @@
   {% endif %}
 
   <form id="formRegistroVoluntario" method="post"
-        action="{{ url_for('new_voluntario') }}"
-        enctype="multipart/form-data">
+        action="{{ url_for('new_voluntario') }}">
 
     <!-- Nombre -->
     <div class="field">
@@ -36,8 +35,7 @@
     <!-- Apellido -->
     <div class="field">
       <label for="lastname">Apellido</label>
-      <input type="text" id="lastname" name="lastname" minlength="2" required
-             data-selected="{{ datos.get('select-phone-code', '+56') }}">
+      <input type="text" id="lastname" name="lastname" minlength="2" required>
       <span class="error-message {% if errores.lastname %}visible{% endif %}" id="lastname-error">
         {{ errores.lastname or 'El apellido es obligatorio' }}
       </span>
@@ -59,7 +57,8 @@
       <div class="phone-group">
 
         <div class="select-field">
-          <select id="select-phone-code" name="select-phone-code" required>
+          <select id="select-phone-code" name="select-phone-code" required
+          data-selected="{{ datos.get('select-phone-code', '+56') }}">
             <option value="">+56</option>
           </select>
           <span class="error-message {% if errores['select-phone-code'] %}visible{% endif %}"
@@ -125,9 +124,6 @@
   </form>
 </div>
 {% endblock %}
-
-<script src="{{ url_for('static', filename='js/registroVoluntarios/select.js') }}"></script>
-<script src="{{ url_for('static', filename='js/registroVoluntarios/validation.js') }}"></script>
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/dataConst.js') }}"></script>
