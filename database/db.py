@@ -70,11 +70,11 @@ class Avistamiento(Base):
 # Model for Registro:
 class Registro(Base):
     __tablename__ = "registro"
-    id             = Column(Integer, primary_key=True, autoincrement=True)
-    ruta_archivo   = Column(String(300), nullable=False)
-    nombre_archivo = Column(String(300), nullable=False)
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    ruta_archivo    = Column(String(300), nullable=False)
+    nombre_archivo  = Column(String(300), nullable=False)
     avistamiento_id = Column(Integer, ForeignKey("avistamiento.id"), nullable=False)
-    avistamiento   = relationship("Avistamiento", back_populates="registros")
+    avistamiento    = relationship("Avistamiento", back_populates="registros")
 
     @property
     def es_video(self):

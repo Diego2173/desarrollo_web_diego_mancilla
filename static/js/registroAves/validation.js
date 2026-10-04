@@ -117,7 +117,9 @@ const validateForm = () => {
     let addressValid     = validateField(addressInput.value, regexMap.address, 1, 100);
     let dateValid        = validateDate(dateInput.value, timeInput.value);
     let fileValid        = validateFile(fileInput.files);
-    let descriptionValid = validateField(descriptionInput.value, regexMap.address, 0, 500)
+
+    // Permitir que esté vacío
+    let descriptionValid = validateField(descriptionInput.value, regexMap.address, 0, 500) || descriptionInput.value.trim() === ""
 
     // Hacer visible span de error
     const setInvalidInput = (errorSpan, input, isValid) => {
