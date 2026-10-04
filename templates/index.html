@@ -9,6 +9,12 @@
 
 {% block content %}
 
+  {% if ok == 'avistamiento' %}
+    <p class="ok-message">¡Avistamiento registrado con éxito!</p>
+  {% elif ok == 'voluntario' %}
+    <p class="ok-message">¡Voluntario registrado con éxito!</p>
+  {% endif %}
+
 <!-- banner -->
   <div class="banner">
     <img src="{{ url_for('static', filename='images/banner.jpg') }}"
@@ -69,11 +75,5 @@
       <a href="{{ url_for('estadisticas') }}">Ver Estadísticas</a>
     </article>
   </section>
-
-  {% if ok == 'avistamiento' %}
-    <p class="ok-message">¡Avistamiento registrado con éxito!</p>
-  {% elif ok == 'voluntario' %}
-    <p class="ok-message">¡Voluntario registrado con éxito!</p>
-  {% endif %}
 
 {% endblock %}
