@@ -40,7 +40,7 @@ def ave_del_dia(today=None):
         return None
     
     seed     = today.year * 10000 + today.month * 100 + today.day
-    position = random.Random(seed).randint(1, n) if db.n > 0 else None
+    position = random.Random(seed).randint(1, n) if n > 0 else None
     ave      = db.get_ave_con_registro(position)
     
     if ave is None:
@@ -282,11 +282,15 @@ def listado():
     total_pages = max(1, (total + PER_PAGE - 1) // PER_PAGE)
     if page > total_pages:
         page = total_pages
-    avistamientos = db.get_avistamientos_paginados(page, PER_PAGE)
+    avistamientos = db.get_avistamientos_paginados(page, PER_PAGE, ave_id, orden, direccion)
     return render_template("listadoAves/listadoAves.html",
                            avistamientos=avistamientos,
-                           page=page, 
-                           total_pages=total_pages
+                           aves=db.get_aves(),
+                           page=page,
+                           total_pages=total_pages,
+                           ave_id=ave_id,
+                           orden=orden,
+                           direccion=direccion
                            )
  
 @app.route("/avistamientos/<int:aid>")
