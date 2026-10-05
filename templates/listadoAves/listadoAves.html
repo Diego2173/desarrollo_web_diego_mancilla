@@ -12,6 +12,35 @@
 {% endblock %}
 
 {% block content %}
+<section class="filter">
+  <form method="get" action="{{ url_for('listado') }}">
+    <div class="field-filter">
+      <label for="ave">Ave</label>
+      <select id="ave" name="ave">
+        <option value="">Todas</option>
+        {% for av in aves %}
+          <option value="{{ av.id }}" {% if ave_id == av.id %}selected{% endif %}>{{ av.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field-filter">
+      <label for="orden">Ordenar por</label>
+      <select id="orden" name="orden">
+        <option value="fecha" {% if orden == 'fecha' %}selected{% endif %}>Fecha</option>
+        <option value="lugar" {% if orden == 'lugar' %}selected{% endif %}>Lugar</option>
+        <option value="ave"   {% if orden == 'ave' %}selected{% endif %}>Ave</option>
+      </select>
+    </div>
+    <div class="field-filter">
+      <label for="dir">Dirección</label>
+      <select id="dir" name="dir">
+        <option value="desc" {% if direccion == 'desc' %}selected{% endif %}>Descendente</option>
+        <option value="asc"  {% if direccion == 'asc' %}selected{% endif %}>Ascendente</option>
+      </select>
+    </div>
+    <button type="submit">Aplicar</button>
+  </form>
+</section>
   <div class="results-table">
     <table>
       <caption>Avistamientos registrados</caption>
@@ -29,8 +58,8 @@
         {% for a in avistamientos %}
           {% set fotos  = a.registros | rejectattr('es_video') | list | length %}
           {% set videos = a.registros | selectattr('es_video') | list | length %}
-          <tr class="clickable-row" data-href="{{ url_for('detalle', aid=a.id, page=page) }}">
-            <td><a href="{{ url_for('detalle', aid=a.id, page=page) }}">{{ a.ave.nombre }}</a></td>
+          <tr class="clickable-row" data-href="{{ url_for('detalle', aid=a.id, page=page, ave=ave_id, orden=orden, dir=direccion) }}">
+            <td><a href="{{ url_for('detalle', aid=a.id, page=page, ave=ave_id, orden=orden, dir=direccion) }}">{{ a.ave.nombre }}</a></td>
             <td>{{ a.lugar }}</td>
             <td>{{ a.fecha_hora.strftime('%d-%m-%Y') }}</td>
             <td>{{ a.fecha_hora.strftime('%H:%M') }}</td>
@@ -52,7 +81,7 @@
   <!-- Paginación -->
   <nav class="paginacion" aria-label="Paginación del listado">
     {% if page > 1 %}
-      <a class="page-btn" href="{{ url_for('listado', page=page - 1) }}">Anterior</a>
+      <a class="page-btn" href="{{ url_for('listado', page=page - 1, ave=ave_id, orden=orden, dir=direccion) }}">Anterior</a>
     {% else %}
       <span class="page-btn disabled">Anterior</span>
     {% endif %}
@@ -60,7 +89,7 @@
     <span id="page-number">Página {{ page }} de {{ total_pages }}</span>
 
     {% if page < total_pages %}
-      <a class="page-btn" href="{{ url_for('listado', page=page + 1) }}">Siguiente</a>
+      <a class="page-btn" href="{{ url_for('listado', page=page + 1, ave=ave_id, orden=orden, dir=direccion) }}">Siguiente</a>
     {% else %}
       <span class="page-btn disabled">Siguiente</span>
     {% endif %}

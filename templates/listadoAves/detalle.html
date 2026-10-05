@@ -63,6 +63,6 @@
       <p>Este avistamiento no tiene archivos adjuntos.</p>
     {% endif %}
 
-    <p><a class="volver" href="{{ url_for('listado', page=page) }}">Volver al listado</a></p>
+    <p><a class="volver" href="{{ url_for('listado', page=page, ave=ave_id, orden=orden, dir=direccion) }}">Volver al listado</a></p>
   </section>
 {% endblock %}

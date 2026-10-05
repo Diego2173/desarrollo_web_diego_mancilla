@@ -49,10 +49,21 @@
       <a href="{{ url_for('listado') }}">Ver todos</a>
     </article>
 
-    <!-- TODO 04: Implementar lógica de Ave del día -->
+    <!-- Ave del día: sorteada con una semilla basada en la fecha -->
     <article class="ave-del-dia">
       <h2>Ave del Día</h2>
-      <p><!-- nombre e imagen del ave del día --></p>
+      {% if ave_dia %}
+        {% if ave_dia.registro and not ave_dia.registro.es_video %}
+          <img src="{{ url_for('static', filename=ave_dia.registro.ruta_archivo) }}"
+               alt="Foto de {{ ave_dia.ave.nombre }}">
+        {% endif %}
+        <p class="ave-nombre">{{ ave_dia.ave.nombre }}</p>
+        {% if ave_dia.registro %}
+          <a href="{{ url_for('detalle', aid=ave_dia.registro.avistamiento_id) }}">Ver avistamiento</a>
+        {% endif %}
+      {% else %}
+        <p>Aún no hay aves con registros.</p>
+      {% endif %}
     </article>
   </section>
 
