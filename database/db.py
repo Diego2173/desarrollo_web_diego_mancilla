@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Text
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Text, func, distinct, or_
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship,  joinedload, selectinload
 
 DB_HOST = "localhost"
@@ -14,6 +14,8 @@ engine = create_engine(DATABASE_URL, echo=False, future=True)
 SessionLocal = sessionmaker(bind=engine)
 
 Base = declarative_base()
+
+EXTENSION_VIDEO = ("mp4", "mov")
 
 # --- Models ---
 # Model for Region:
@@ -181,21 +183,34 @@ def get_last_avistamientos(n=2):
                 .limit(n).all())
     finally:
         session.close()
-        
-def count_avistamientos():
+
+ORDEN_COLUMNAS = {"fecha": Avistamiento.fecha_hora,
+                  "lugar": Avistamiento.lugar,
+                  "ave":   Ave.nombre}
+
+def count_avistamientos(ave_id=None):
     session = SessionLocal()
     try:
-        return session.query(Avistamiento).count()
+        q = session.query(Avistamiento)
+        if ave_id:
+            q = q.filter(Avistamiento.ave_id == ave_id)
+        return q.count()
     finally:
         session.close()
 
-def get_avistamientos_paginados(page=1, per_page=5):
+def get_avistamientos_paginados(page=1, per_page=5, ave_id=None, orden="fecha", direccion="desc"):
     offset = (page - 1) * per_page
     session = SessionLocal()
     try:
-        return (_con_relaciones(session.query(Avistamiento))
-                .order_by(Avistamiento.fecha_hora.desc(), Avistamiento.id.desc())
-                .limit(per_page).offset(offset).all())
+        q = _con_relaciones(session.query(Avistamiento))
+        if ave_id:
+            q = q.filter(Avistamiento.ave_id == ave_id)
+        if orden == "ave":
+            q = q.join(Ave, Avistamiento.ave_id == Ave.id)
+        col = ORDEN_COLUMNAS[orden]
+        col = col.asc() if direccion == "asc" else col.desc()
+        return (q.order_by(col, Avistamiento.id.desc())
+                 .limit(per_page).offset(offset).all())
     finally:
         session.close()
 
@@ -205,5 +220,44 @@ def get_avistamiento(id_):
         return (_con_relaciones(session.query(Avistamiento))
                 .filter(Avistamiento.id == id_).one_or_none())
 
+    finally:
+        session.close()
+        
+# ------ Ave del día ------
+# Note that aves_con_registro gets an ave that has at least a file asociated
+def count_aves_con_registro():
+    session = SessionLocal()
+    try:
+        return (session.query(func.count(distinct(Ave.id)))
+                .join(Avistamiento, Avistamiento.ave_id == Ave.id)
+                .join(Registro, Registro.avistamiento_id == Avistamiento.id)
+                .scalar())
+    finally:
+        session.close()
+
+# Ave with position k in 1 to n aves obtained by the ordering of aves_con_registro by name 
+def get_ave_con_registro(position):
+    session = SessionLocal()
+    try:
+        return (session.query(Ave)
+                .join(Avistamiento, Avistamiento.ave_id == Ave.id)
+                .join(Registro, Registro.avistamiento_id == Avistamiento.id)
+                .distinct()
+                .order_by(Ave.nombre, Ave.id)
+                .offset(position - 1).limit(1)
+                .first())
+    finally:
+        session.close()
+
+# Gets newer register
+def get_registro_reciente_de_ave(ave_id):
+    session = SessionLocal()
+    try:
+        base = (session.query(Registro)
+                .join(Avistamiento, Registro.avistamiento_id == Avistamiento.id)
+                .filter(Avistamiento.ave_id == ave_id))
+        is_video = or_(*[Registro.ruta_archivo.ilike(f"%.{e}") for e in EXTENSION_VIDEO])
+        foto = base.filter(~is_video).order_by(Registro.id.desc()).first()
+        return foto or base.order_by(Registro.id.desc()).first()
     finally:
         session.close()
