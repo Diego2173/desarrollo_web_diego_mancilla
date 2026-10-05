@@ -139,6 +139,27 @@ main {
     padding: 1.5rem;
     transition: box-shadow 0.2s ease;
 }
+.ave-del-dia h2 {
+    display: block;
+}
+.ave-del-dia img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+}
+.ave-del-dia .ave-nombre {
+    color: var(--white-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.ave-del-dia a {
+    color: var(--white-color);
+    font-size: 1rem;
+}
 .listado-preview h2, .ave-del-dia h2 {
     margin-top: 0;
     margin-bottom: 0.75rem;
@@ -146,7 +167,7 @@ main {
     font-family: "Poppins", sans-serif;
     color: var(--white-color);
 }
- .listado-preview p, ave-del-dia p {
+ .listado-preview p, .ave-del-dia p {
     font-family: "Poppins", sans-serif;
     color: var(--white-color);
  }
@@ -161,7 +182,6 @@ main {
     opacity: 0.85;
     text-decoration: underline;
 }
-
 
 /* accesos: listado-preview, .ave-del-dia */
 .accesos {

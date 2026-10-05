@@ -204,7 +204,18 @@ a.page-btn:hover {
     background-color: var(--accent-color-2);
 }
  
-/* En pantallas angostas la tabla se desplaza dentro de su contenedor, no la página completa */
+
 .results-table {
     overflow-x: auto;
+}
+
+button {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    color: var(--white-color);
+    background-color: var(--accent-color-1);
+    border: none;
+    border-radius: 8px;
+    margin-top: 0.5rem;
 }
