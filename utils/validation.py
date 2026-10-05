@@ -29,6 +29,17 @@ def validate_type(value):
         return False
     return True
 
+# --- functions for Voluntarios ---
+def validate_phone_total(code, number):
+    if not code or not number:
+        return False
+    
+    code   = code.strip()
+    number = number.strip()
+    length_valid = len(f"{code} {number}") <= 15
+    
+    return length_valid
+
 # --- functions for Avistamiento ---
 # function to validate time
 def validate_time(value):
@@ -93,7 +104,9 @@ def validate_files(files):
             return False
  
     return True
- 
+
+"""
+
 def validate_voluntario(name, lastname, email, phone_code, phone, region, comuna, address):
  
     nameValid      = validate_field(name, TEXT_RE, 2, 32)
@@ -121,3 +134,4 @@ def validate_avistamiento(bird_type, bird_name, region, comuna, address, date, t
  
     return (birdTypeValid and birdNameValid and regionValid and comunaValid
             and addressValid and dateValid and fileValid and descriptionValid)
+"""
