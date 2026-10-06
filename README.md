@@ -4,6 +4,7 @@
 
 ### Overview de los archivos:
 
+Anteriormente los archivos estaban ordenados así:
 ```
 |-- index.html                          # Página de inicio del sitio
 |
@@ -41,85 +42,125 @@
 |   |-- logo.svg                        # Logo del sitio
 ```
 
+Mientras que ahora, la estructura es:
+```
+├-- app.py                          # Punto de entrada de la aplicación Flask (rutas)
+├-- requirements.txt                # Requerimientos del proyecto
+│
+├-- database/
+│   ├-- db.py                       # Modelos (SQLAlchemy) y funciones que interactúan con la BD
+│   ├-- load_tables.py              # Script de carga inicial de datos
+│   ├-- tarea2.sql                  # Schema y tablas principales
+│   ├-- aves.sql                    # Script con información de aves
+│   └-- region-comuna.sql           # Script de regiones y comunas de Chile
+│
+├-- utils/
+│   └-- validation.py               # Validaciones por el lado del servidor
+│
+├-- static/                         # Archivos estáticos
+│   ├-- css/                        # Mismos 5 archivos de la Tarea 1 (index, form, listado, estadisticas, registroExitoso)
+│   ├-- js/
+│   │   ├-- comunas.js              # Pide las comunas de una región a /api/comunas/<id> y llena el select
+│   │   ├-- dataConst.js            # Constantes hardcodeadas; ahora solo se usa para los códigos telefónicos y las estadísticas
+│   │   ├-- data.js                 # Datos de ejemplo de la Tarea 1; ahora solo los usan las estadísticas
+│   │   ├-- registroVoluntarios/
+│   │   │   ├-- select.js           # Puebla el select del código telefónico
+│   │   │   └-- validation.js       # Validación del formulario de voluntarios
+│   │   ├-- registroAves/
+│   │   │   └-- validation.js       # Validación del formulario de avistamiento
+│   │   ├-- listadoAves/
+│   │   │   └-- listadoAves.js      # Hace clickable cada fila del listado
+│   │   └-- estadisticas/
+│   │       └-- estadisticas.js     # Cálculo de indicadores y gráficos (Chart.js)
+│   ├-- images/                     # banner.jpg y logo.svg
+│   └-- uploads/                    # Directorio donde se almacenan las fotos y videos subidos
+│
+└-- templates/                      # Plantillas de Jinja
+    ├-- base.html                   # Estructura común (header, navegación) con bloques para cada página
+    ├-- index.html                  # Página principal
+    ├-- form/
+    │   ├-- form_voluntarios.html   # Formulario de registro de voluntarios
+    │   └-- form_aves.html          # Formulario de registro de avistamientos
+    ├-- listadoAves/
+    │   ├-- listadoAves.html        # Listado de avistamientos (filtro, orden y paginación)
+    │   └-- detalle.html            # Información completa de un avistamiento
+    ├-- estadisticas/
+    │   └-- estadisticas.html       # Sección de estadísticas
+    └-- successful/
+        ├-- successfulRegistrationVoluntarios.html   # Confirmación de registro de voluntario
+        └-- successfulRegistrationAves.html          # Confirmación de avistamiento informado
+```
+
+Se refactorizaron los archivos de `pages/` de la Tarea 1 en los archivos de `templates/`, de la siguiente forma:
+ 
+| Tarea 1 | Tarea 2 |
+|---|---|
+| `index.html` | `templates/index.html` |
+| `pages/registroVoluntarios.html` | `templates/form/form_voluntarios.html` |
+| `pages/registroAves.html` | `templates/form/form_aves.html` |
+| `pages/listadoAves.html` | `templates/listadoAves/listadoAves.html` (más el nuevo `detalle.html`) |
+| `pages/estadisticas.html` | `templates/estadisticas/estadisticas.html` |
+| `pages/registroExitosoVoluntarios.html` | `templates/successful/successfulRegistrationVoluntarios.html` |
+| `pages/registroExitosoAves.html` | `templates/successful/successfulRegistrationAves.html` |
+
+En que `base.html` contiene el código html repetitivo de la tarea1 (e.g. código de `navbar`). Notar también que los CSS e imágenes pasaron a `static/`.
+
+En cuanto a javascript, los cambios fueron:
+1. Las regiones ya no salen de `dataConst.js`, ahora las entrega Flask desde la BD. Como ambos formularios contemplaban región y comuna, estas se piden por `fetch` a `/api/comunas/<id>` (`comunas.js`).
+
+2. Los selects de ave y voluntario del formulario de avistamiento los renderiza Jinja, por lo que `registroAves/select.js` ya no existe.
+
+3. `listadoAves.js` que contenía la lógica de paginación ahora los hace el servidor.
+
 ---
 ### Decisiones de diseño generales
+
+Se replica la lógica de validación de los formularios de Javascript en Python, es decir, se replica el código de `validation.js` en `utils/validation.py`. Esto genera una doble validación;
+1. En el navegador se mantienen las validaciones de la Tarea 1. Si algún campo es inválido se cancela el envío y se muestran los errores. Si es válido, el formulario se envía por POST a Flask.
+
+2. En el servidor se vuelven a validar todos los campos. Si hay errores, se vuelve a mostrar el formulario con los datos ya ingresados y un mensaje en cada campo con error.
+
+La mayoría de las validaciones se hacen validando el formato y el largo del input. Gran parte de la lógica de la tarea 1 se mantiene intacta.
+
+El archivo `database/db.py` fue hecho basado #### en los auxiliares #####. Se puede separar el archivo en cuatro partes:
+1. Modelos de la Base de Datos
+2. Funciones de get
+3. Funciones de create
+4. Funciones para hacer agregaciones y ####
+
+#### Modelo de datos
+Se utilizó el esquema de `tarea2.sql` sin modificarlo, lo que genera que ciertos campos de los formularios no se guarden, como la dirección en el formulario de voluntario. El formulario pide y valida la dirección, pero solo se guarda la comuna (`comuna_id`). Se mantuvo el esquema `tarea2.sql` dado que #####.
+
+Por otro lado, `voluntario.telefono` es `VARCHAR(15)` en el esquema, por lo que se valida que código y el número juntos no superen los 15 caracteres y no que los dos estén bien formateados y de un largo correcto.
+
+También, `avistamiento.lugar` se arma como `dirección, comuna, región`, `voluntario.fecha_registro` se asigna con la fecha y hora del momento en que se hace el `INSERT`, como se menciona en el enunciado cada archivo subido es una fila de `registro`, por lo que un avistamiento puede tener varios, y por último, pero no menos importante:La tabla `ave` solo tiene el nombre y no el tipo de ave como en la Tarea1, esto es debido a que se decidió respetar el esquema de `tarea2.sql`, sin embargo, no sería complejo ####. Así que el formulario elige el ave de un select y el filtro del listado es por ave.
+
+#### `app.py`
+describir archivo con el mismo estilo
+
+#### Archivos subidos
+Cada archivo se guarda en `static/uploads/` con el nombre `<hash del nombre original>_<uuid>.<extensión real>`. Así no hay colisiones y ni se usa el nombre que escribió el usuario.
+
+Mientras que el nombre original se guarda en `registro.nombre_archivo` sanitizado con `secure_filename`.
+
+#### Rutas
  
-- Todas las validaciones de los campos de los formularios (salvo la validación de hora y los selects) se hacen combinando una expresión regular para validar formato, y la extensión mínima/máxima del input para validar el largo. 
-- El listado de avistamientos podría mostrarse como algo que no sea sea una tabla, pero considero que una tabla es una representación clara y suficiente. Calza bien con el requerimiento de filtrar, ordenar y paginar.
-- Para las estadísticas, usé Chart.js en vez de graficar todoa a mano por practicidad, es la librería más sencilla que encontré para graficar, y cumple el propósito de forma adecuada.
-
-### `index`
-Compuesto por `index.html` + `css/index.css`. Está separado en tres secciones:
-1. **Banner**: Lo agregué por porque es algo que veo normalmente al entrar a una página web, qué está para captar la atención; sin el banner la página se vería muy  vacía.
-2. **Destacados**: El primer artículo hace referencia a `pages/listadoAves.html`, mientras que "Ave del día" es un placeholder vacío que nació de que generalmente páginas de enciclopedias o similares hay secciones así.
-3. **Accesos**: acceso rápido a registro de voluntarios, registro de aves y estadísticas.
-Con esta separación, se puede acceder a todas las páginas pedidas en la tarea desde el inicio (de una forma que no sea la barra de navegación).
-
----
-### `registroVoluntarios`
-
-El formulario está compuesto por:
-1. Nombre y apellido: inputs de texto, con `minlength="2"`, pero se podría cambiar si hay un mejor largo mínimo.
-2. Email: input de tipo `email`.
-3. Teléfono: agrupado en dos campo; un select con el código de país (por defecto `+56`) y un input de texto para el número.
-4. Dirección: agrupada en región y comuna (selects) y un input de texto para la dirección.
-
-Cada campo usa su `id` y tiene su propio `<span>` de error asociado, en que ambos se obtienen con `getElementById` para poder alternar la clase de error del input y mostrar/ocultar su mensaje de error correspondiente en conjunto, dentro de una misma función (`setInvalidInput`).
-
-El JS está separado en 3 archivos:
-
-1. **`js/dataConst.js`**: Que contiene las constantes hardcodeadas de regiones y comunas y códigos telefónicos.
-2. **`js/registroVoluntarios/select.js`**: puebla los `<select>` de región/comuna/código telefónico usando las constantes de `dataConst.js`.
-2. **`js/registroVoluntarios/validation.js`**: valida las entradas del formulario mediante:
-  - `validateField(value, regex, minlength, maxlength)`: valida cualquier campo de texto contra un regex guardado en un mapa, más un largo mínimo/máximo. Se definió así, para reutilizar la misma lógica de validación en todos los campos de texto del formulario (nombre, apellido, email, teléfono, dirección), sin repetir el mismo código de forma independiente para cada uno.
-  - `validateType(value)`: valida que un `<select>` no se haya quedado en su opción por defecto.
+| Ruta | Método | Descripción |
+|---|---|---|
+| `/` | GET | Portada |
+| `/voluntarios` | GET, POST | Formulario de registro de voluntarios |
+| `/voluntarios/<id>/exito` | GET | Confirmación del registro de un voluntario |
+| `/avistamientos/nuevo` | GET, POST | Formulario de registro de avistamientos |
+| `/avistamiento/<id>/exito` | GET | Confirmación del registro de un avistamiento |
+| `/avistamientos` | GET | Listado (parámetros `page`, `ave`, `orden`, `dir`) |
+| `/avistamientos/<id>` | GET | Detalle de un avistamiento |
+| `/api/comunas/<region_id>` | GET | JSON con las comunas de una región |
+| `/estadisticas` | GET | Estadísticas |
+| `/olvidar` | GET | Borra la sesión del voluntario |
 
 ---
-### `registroAves`
+#### `estadisticas` y `static/js/data.js` 
 
-El formulario está compuesto por:
-1. Tipo de ave: select poblado desde `tiposAves` (en `dataConst.js`).
-2. Nombre de ave: input de texto.
-3. Dirección de avistamiento: región, comuna y dirección (mismo patrón que en `registroVoluntarios`).
-4. Fecha y hora del avistamiento: Con input de fecha e input de hora.
-5. Archivo: input de tipo `file`, acepta foto o video y permite seleccionar varios archivos a la vez.
-6. Descripción adicional: `<textarea>`, opcional.
-
-El JS también está separado en 3 archivos:
-
-1. **`js/dataConst.js`**: para usar `tiposAves` y `regionesComunas`.
-2. **`js/registroAves/select.js`**: puebla los `<select>` de tipo de ave, región y comuna.
-3. **`js/registroAves/validation.js`**: reutiliza `validateField`, `validateType` y `setFieldStyle` de la misma forma que en `registroVoluntarios`. También agrega:
-  - `validateTime(timeStr)`: valida el formato de la hora con un regex (`HH:MM`), por separado de la fecha.
-  - `validateDate(dateStr, timeStr)`: primero valida la hora, y si es válida, la combina con la fecha en un solo `Date`. Se compara contra la fecha/hora actual y contra una fecha mínima (5 años), puesto que la fecha no puede ser futura ni muy antigua. Se definió así, para tener un solo punto de comparación entre fecha y hora en vez de validarlas como campos completamente independientes, ya que un avistamiento sin ambos datos combinados no tiene mucho sentido temporal. Los 5 años son un poco arbitrarios, pero me pareció razonable definir esta límite.
-  - `validateFile(files)`: recorre la lista de archivos seleccionados y valida, para cada uno, que su tipo esté en una lista de extensiones permitidas (`jpeg`, `png`, `webp`, `mp4`, `quicktime`) y que no supere los 20 MB. Se definió así, para permitir múltiples archivos por avistamiento sin dejar pasar formatos no soportados ni archivos excesivamente pesados. Algo que quedó en el tintero es definir un máximo de peso permitido, por ejemplo, que los archivos en total no pueden sumar más que 200 MB. 
-
+El contenido se mantiene igual que en la Tarea1 debido a que no #######. El único cambio que cabe mencionar es que `estadisticas.html` hereda `base.html` ######, no hay conexión con la BD, las estádisticas se siguen alimentando de `data.js`
+ 
 ---
-### `listadoAves`
-
-Muestra una tabla con tipo de ave, nombre, lugar, fecha, hora y si el registro adjunto es foto o video. Incluye:
-1. Filtro por tipo de ave.
-2. Ordenamiento por fecha, lugar, tipo de ave o nombre de ave (cada uno ascendente o descendente).
-3. Paginación (5 avistamientos por página).
-
-El JS carga 3 scripts:
-
-1. **`js/dataConst.js`**: para poblar el filtro de tipo de ave con `tiposAves`.
-2. **`js/data.js`**: datos de ejemplo de avistamientos y voluntarios, generados con IA generativa, para poder probar el filtro/orden/paginación sin tener un backend real.
-3. **`js/listadoAves/listadoAves.js`**:
-  - `populateBirdTypeFilter()`: puebla el filtro, igual que los `populate...` de las páginas de registro.
-  - `filterSighting()`: aplica el filtro de tipo de ave seleccionado sobre `sightingData`.
-  - `orderSighting(list, criteria, asc)`: ordena la lista según el criterio elegido. Se definió así, para poder reutilizar una sola función de orden en vez de escribir un `sort` distinto por cada columna ordenable. Tiene dos casos especiales: si el criterio es `"place"`, concatena comuna + región (porque "lugar" no es un solo campo del dato); si es `"date"`, concatena fecha + hora (para desempatar avistamientos del mismo día por su hora). En cualquier otro caso, usa directamente `item[criteria]`.
-  - `createRow(sighting)`: arma una fila de la tabla, celda por celda.
-  - `renderList()`: Realiza todo el renderizado de la tabla.
-
----
-### `estadisticas`
-
-Contiene indicadores y gráficos:
-1. Indicadores: cantidad de voluntarios registrados y de avistamientos registrados con el largo (`.length`) de cada arreglo de `data.js`.
-2. Gráficos, hechos con **Chart.js**: avistamientos por mes (barras) y voluntarios por región (torta). Se eligió Chart.js en vez de graficar a mano por practicidad, es la librería más sencilla que encontré para graficar, y cumple el propósito de forma adecuada.
-
-La función `countBy(list, key, byMonth)`, se definió así para reutilizar una sola función de conteo en vez de escribir una función distinta para cada gráfico (y se quisiera extender a dibujar más gráficos con facilidad si se quisiera).
-
-Al cargar la página se actualizan los indicadores y se dibujan ambos gráficos.
