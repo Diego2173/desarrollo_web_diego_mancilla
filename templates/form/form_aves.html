@@ -14,6 +14,7 @@
 {% block content %}
 <div class="container">
   <h2>Detalles del avistamiento</h2>
+  <p>* Campo obligatorio</p>
 
   {% if errores.db %}
     <p class="error-message visible">{{ errores.db }}</p>
@@ -30,7 +31,7 @@
 
       <!-- Ave -->
       <div class="select-field">
-        <label for="ave_id">Ave</label>
+        <label for="ave_id">Ave <span class="required" aria-hidden="true">*</span></label>
         <select id="ave_id" name="ave_id" required>
           <option value="">-- Seleccione un ave --</option>
           {% for a in aves %}
@@ -47,7 +48,7 @@
       </div>
 
       <div class="select-field">
-        <label for="voluntario_id">Voluntario</label>
+        <label for="voluntario_id">Voluntario <span class="required" aria-hidden="true">*</span></label>
         <select id="voluntario_id" name="voluntario_id" required>
           <option value="">-- Seleccione un voluntario --</option>
           {% for v in voluntarios %}
@@ -70,6 +71,7 @@
       <div class="address-row">
 
         <div class="select-field">
+          <label for="select-region">Región <span class="required" aria-hidden="true">*</span></label>
           <select id="select-region" name="select-region" required>
             <option value="">Región</option>
             {% for r in regiones %}
@@ -86,6 +88,7 @@
         </div>
 
         <div class="select-field">
+          <label for="select-comuna">Comuna <span class="required" aria-hidden="true">*</span></label>
           <select id="select-comuna" name="select-comuna" required
               data-selected="{{ datos.get('select-comuna', '') }}">
             <option value="">Comuna</option>
@@ -97,6 +100,7 @@
         </div>
 
         <div class="field">
+          <label for="address">Calle o lugar <span class="required" aria-hidden="true">*</span></label>
           <input type="text" id="address" name="address" minlength="1" required
                  value="{{ datos.get('address','') }}">
           <span class="error-message {% if errores.address %}visible{% endif %}"
@@ -110,7 +114,7 @@
     <!-- Fecha y hora -->
     <div class="date-group">
       <div class="field">
-        <label for="date">Fecha del avistamiento</label>
+        <label for="date">Fecha del avistamiento <span class="required" aria-hidden="true">*</span></label>
         <input type="date" id="date" name="date" required
                value="{{ datos.get('date','') }}">
         <span class="error-message {% if errores.date %}visible{% endif %}"
@@ -120,7 +124,7 @@
       </div>
 
       <div class="field">
-        <label for="time">Hora del avistamiento</label>
+        <label for="time">Hora del avistamiento <span class="required" aria-hidden="true">*</span></label>
         <input type="time" id="time" name="time" required
                value="{{ datos.get('time','') }}">
         <span class="error-message {% if errores.date %}visible{% endif %}"
@@ -132,7 +136,7 @@
 
     <!-- Archivos -->
     <div class="file-field">
-      <label for="file">Fotos o videos del avistamiento</label>
+      <label for="file">Fotos o videos del avistamiento <span class="required" aria-hidden="true">*</span></label>
       <input type="file" id="file" name="file"
              accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime"
              multiple required>

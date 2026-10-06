@@ -14,6 +14,7 @@
 {% block content %}
 <div class="container">
   <h2>Regístrate como voluntario</h2>
+  <p>* Campo obligatorio</p>
 
   {% if errores.db %}
     <p class="error-message visible">{{ errores.db }}</p>
@@ -24,7 +25,7 @@
 
     <!-- Nombre -->
     <div class="field">
-      <label for="name">Nombre</label>
+      <label for="name">Nombre <span class="required" aria-hidden="true">*</span></label>
       <input type="text" id="name" name="name" minlength="2" required
              value="{{ datos.get('name','') }}">
       <span class="error-message {% if errores.name %}visible{% endif %}" id="name-error">
@@ -34,7 +35,7 @@
 
     <!-- Apellido -->
     <div class="field">
-      <label for="lastname">Apellido</label>
+      <label for="lastname">Apellido <span class="required" aria-hidden="true">*</span></label>
       <input type="text" id="lastname" name="lastname" minlength="2" required>
       <span class="error-message {% if errores.lastname %}visible{% endif %}" id="lastname-error">
         {{ errores.lastname or 'El apellido es obligatorio' }}
@@ -43,7 +44,7 @@
 
     <!-- Email -->
     <div class="field">
-      <label for="email">Email</label>
+      <label for="email">Email <span class="required" aria-hidden="true">*</span></label>
       <input type="email" id="email" name="email" minlength="10" required
              value="{{ datos.get('email','') }}">
       <span class="error-message {% if errores.email %}visible{% endif %}" id="email-error">
@@ -53,10 +54,11 @@
 
     <!-- Teléfono -->
     <div class="field">
-      <label for="phone">Teléfono</label>
+      <label for="phone">Teléfono <span class="required" aria-hidden="true">*</span></label>
       <div class="phone-group">
 
         <div class="select-field">
+          <label for="select-phone-code">Código de país <span class="required" aria-hidden="true">*</span></label>
           <select id="select-phone-code" name="select-phone-code" required
           data-selected="{{ datos.get('select-phone-code', '+56') }}">
             <option value="">+56</option>
@@ -83,6 +85,7 @@
       <div class="address-row">
 
         <div class="select-field">
+          <label for="select-region">Región <span class="required" aria-hidden="true">*</span></label>
           <select id="select-region" name="select-region" required>
             <option value="">Región</option>
             {% for r in regiones %}
@@ -99,6 +102,7 @@
         </div>
 
         <div class="select-field">
+          <label for="select-comuna">Comuna <span class="required" aria-hidden="true">*</span></label>
           <select id="select-comuna" name="select-comuna" required
                   data-selected="{{ datos.get('select-comuna', '') }}">
             <option value="">Comuna</option>
@@ -110,7 +114,8 @@
         </div>
 
         <div class="field">
-          <input type="text" id="address" name="address" minlength="10"
+          <label for="address">Calle y número <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="address" name="address" minlength="10" required
                  value="{{ datos.get('address','') }}">
           <span class="error-message {% if errores.address %}visible{% endif %}"
                 id="address-error">
