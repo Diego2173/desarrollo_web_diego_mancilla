@@ -61,14 +61,14 @@ def index():
 # -%-%-%- API JSON para comunas -%-%-%-
 @app.route("/api/comunas/<int:rid>")
 def api_comunas(rid):
-    return jsonify([{"id": c.id, "nombre": c.nombre} for c in db.get_comunas(rid)])
+    return jsonify([{"id": c.id, "nombre": c.nombre} for c in db.get_comuna(rid)])
  
 # -%-%-%- VOLUNTARIO -%-%-%-
 @app.route("/voluntarios", methods=["GET", "POST"])
 def new_voluntario():
     if request.method == "GET":
         return render_template("form/form_voluntarios.html",
-                               regiones=db.get_regiones(),
+                               regiones=db.get_region(),
                                errores={},
                                datos={}
                                )
@@ -111,7 +111,7 @@ def new_voluntario():
 
     if errores:
         return render_template("form/form_voluntarios.html",
-                               regiones=db.get_regiones(),
+                               regiones=db.get_region(),
                                errores=errores, 
                                datos=form
                                ), 400
@@ -124,7 +124,7 @@ def new_voluntario():
     vid = db.create_voluntario(full_name, email, phone, comuna_id)
     if vid is None:
         return render_template("form/form_voluntarios.html",
-                               regiones=db.get_regiones(),
+                               regiones=db.get_region(),
                                errores={"db": "Error al guardar en la BD. Intenta de nuevo."},
                                datos=form
                                ), 500
@@ -146,8 +146,8 @@ def voluntario_exito(vid):
 def new_avistamiento():
     if request.method == "GET":
         return render_template("form/form_aves.html",
-                               regiones=db.get_regiones(),
-                               aves=db.get_aves(),
+                               regiones=db.get_region(),
+                               aves=db.get_ave(),
                                voluntarios=db.get_voluntarios(),
                                preseleccion=request.args.get("voluntario_id") or session.get("voluntario_id"),
                                errores={}, 
@@ -190,8 +190,8 @@ def new_avistamiento():
  
     if errores:
         return render_template("form/form_aves.html",
-                               regiones=db.get_regiones(),
-                               aves=db.get_aves(),
+                               regiones=db.get_region(),
+                               aves=db.get_ave(),
                                voluntarios=db.get_voluntarios(),
                                preseleccion=form.get("voluntario_id"),
                                errores=errores, 
@@ -209,28 +209,28 @@ def new_avistamiento():
  
     if db.get_voluntario(voluntario_id) is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_regiones(), aves=db.get_aves(),
+                               regiones=db.get_region(), aves=db.get_ave(),
                                voluntarios=db.get_voluntarios(),
                                errores={"voluntario_id": "Voluntario no existe."},
                                datos=form), 400
  
-    ave = next((a for a in db.get_aves() if a.id == ave_id), None)
+    ave = next((a for a in db.get_ave() if a.id == ave_id), None)
     if ave is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_regiones(), aves=db.get_aves(),
+                               regiones=db.get_region(), aves=db.get_ave(),
                                voluntarios=db.get_voluntarios(),
                                errores={"ave_id": "Ave no existe."},
                                datos=form), 400
  
-    comuna = next((c for c in db.get_comunas(region_id) if c.id == comuna_id), None)
+    comuna = next((c for c in db.get_comuna(region_id) if c.id == comuna_id), None)
     if comuna is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_regiones(), aves=db.get_aves(),
+                               regiones=db.get_region(), aves=db.get_ave(),
                                voluntarios=db.get_voluntarios(),
                                errores={"select-comuna": "Comuna no válida."},
                                datos=form), 400
  
-    region = next(r for r in db.get_regiones() if r.id == region_id)
+    region = next(r for r in db.get_region() if r.id == region_id)
     lugar  = f"{form['address'].strip()}, {comuna.nombre}, {region.nombre}"
     if len(lugar) > 200:
         lugar = lugar[:200]
@@ -285,7 +285,7 @@ def listado():
     avistamientos = db.get_avistamientos_paginados(page, PER_PAGE, ave_id, orden, direccion)
     return render_template("listadoAves/listadoAves.html",
                            avistamientos=avistamientos,
-                           aves=db.get_aves(),
+                           aves=db.get_ave(),
                            page=page,
                            total_pages=total_pages,
                            ave_id=ave_id,

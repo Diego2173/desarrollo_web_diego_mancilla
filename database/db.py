@@ -104,7 +104,7 @@ def get_comuna(region_id):
     finally:
         session.close()
 
-def get_voluntario():
+def get_voluntarios():
     session = SessionLocal()
     try:
         return session.query(Voluntario).order_by(Voluntario.nombre).all()
