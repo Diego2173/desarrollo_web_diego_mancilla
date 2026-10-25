@@ -8,6 +8,9 @@ PHONE_RE = re.compile(r'^[0-9]+(?:[ -][0-9]+)*$')
 ADDR_RE  = re.compile(r'^[a-zA-Z0-9\s.,\-#°ñÑáéíóúÁÉÍÓÚ]+$')
 TIME_RE  = re.compile(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')
 
+COMMENT_NAME_RE = re.compile(r'^[^\r\n]+$')
+COMMENT_TEXT_RE = re.compile(r'^[\s\S]+$')
+
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_FILES      = 10
 
@@ -104,34 +107,3 @@ def validate_files(files):
             return False
  
     return True
-
-"""
-
-def validate_voluntario(name, lastname, email, phone_code, phone, region, comuna, address):
- 
-    nameValid      = validate_field(name, TEXT_RE, 2, 32)
-    lastnameValid  = validate_field(lastname, TEXT_RE, 2, 32)
-    emailValid     = validate_field(email, EMAIL_RE, 10, 64)
-    phoneCodeValid = validate_type(phone_code)
-    phoneValid     = validate_field(phone, PHONE_RE, 8, 15)
-    regionValid    = validate_type(region)
-    comunaValid    = validate_type(comuna)
-    addressValid   = validate_field(address, ADDR_RE, 0, 100)
- 
-    return (nameValid and lastnameValid and emailValid and phoneCodeValid
-            and phoneValid and regionValid and comunaValid and addressValid)
- 
-def validate_avistamiento(bird_type, bird_name, region, comuna, address, date, time, files, description):
- 
-    birdTypeValid    = validate_type(bird_type)
-    birdNameValid    = validate_field(bird_name, TEXT_RE, 3, 50)
-    regionValid      = validate_type(region)
-    comunaValid      = validate_type(comuna)
-    addressValid     = validate_field(address, ADDR_RE, 1, 100)
-    dateValid        = validate_date(date, time)
-    fileValid        = validate_files(files)
-    descriptionValid = validate_field(description, ADDR_RE, 0, 1000)
- 
-    return (birdTypeValid and birdNameValid and regionValid and comunaValid
-            and addressValid and dateValid and fileValid and descriptionValid)
-"""
