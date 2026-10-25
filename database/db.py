@@ -1,3 +1,4 @@
+-- Active: 1790892494608@@127.0.0.1@3306@tarea2
 from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Text, func, distinct, or_
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship,  joinedload, selectinload
@@ -46,14 +47,12 @@ class Voluntario(Base):
     comuna         = relationship("Comuna", back_populates="voluntarios")
     avistamientos  = relationship("Avistamiento", back_populates="voluntario")
 
-
 # Model for Ave:
 class Ave(Base):
     __tablename__ = "ave"
     id            = Column(Integer, primary_key=True, autoincrement=True)
     nombre        = Column(String(80), nullable=False)
     avistamientos = relationship("Avistamiento", back_populates="ave")
-
 
 # Model for Avistamiento:
 class Avistamiento(Base):
@@ -67,7 +66,6 @@ class Avistamiento(Base):
     voluntario    = relationship("Voluntario", back_populates="avistamientos")
     ave           = relationship("Ave", back_populates="avistamientos")
     registros     = relationship("Registro", back_populates="avistamiento")
-
 
 # Model for Registro:
 class Registro(Base):
@@ -92,30 +90,21 @@ class Comentario(Base):
 
 # --- Database Functions ---
 # ------ get Functions ------
-def get_regiones():
+def get_region():
     session = SessionLocal()
     try:
         return session.query(Region).order_by(Region.nombre).all()
     finally:
         session.close()
 
-def get_comunas(region_id):
+def get_comuna(region_id):
     session = SessionLocal()
     try:
-        return (session.query(Comuna)
-                       .filter(Comuna.region_id == region_id)
-                       .order_by(Comuna.nombre).all())
+        return (session.query(Comuna).filter(Comuna.region_id == region_id).order_by(Comuna.nombre).all())
     finally:
         session.close()
 
-def get_aves():
-    session = SessionLocal()
-    try:
-        return session.query(Ave).order_by(Ave.nombre).all()
-    finally:
-        session.close()
-
-def get_voluntarios():
+def get_voluntario():
     session = SessionLocal()
     try:
         return session.query(Voluntario).order_by(Voluntario.nombre).all()
@@ -128,80 +117,52 @@ def get_voluntario(id_):
         return session.get(Voluntario, id_)
     finally:
         session.close()
-        
-def get_comentarios(avistamiento_id):
+
+def get_ave():
     session = SessionLocal()
     try:
-        return (session.query(Comentario)
-                .filter(Comentario.avistamiento_id == avistamiento_id)
-                .order_by(Comentario.fecha.desc(), Comentario.id,desc())
-                .all())
+        return session.query(Ave).order_by(Ave.nombre).all()
     finally:
         session.close()
-
-# ------ create Functions ------
-def create_voluntario(nombre, email, telefono, comuna_id):
+     
+def get_comentario(avistamiento_id):
     session = SessionLocal()
     try:
-        v = Voluntario(nombre=nombre, email=email, telefono=telefono,
-                       comuna_id=comuna_id, fecha_registro=datetime.now())
-        session.add(v)
+        return (session.query(Comentario).filter(Comentario.avistamiento_id == avistamiento_id)
+                .order_by(Comentario.fecha.desc(), Comentario.id.desc()).all())
+    finally:
+        session.close()
+            
+# ------ create Functions ------
+def insert_in_DB(object):
+    session = SessionLocal()
+    try:
+        session.add(object)
         session.commit()
-        session.refresh(v)
-        return v.id
+        session.refresh(object)
+        return object.id
     except Exception:
         session.rollback()
         return None
     finally:
         session.close()
+
+def create_voluntario(nombre, email, telefono, comuna_id):
+    v = Voluntario(nombre=nombre, email=email, telefono=telefono, comuna_id=comuna_id, fecha_registro=datetime.now())
+    return insert_in_DB(v)
 
 def create_avistamiento(voluntario_id, ave_id, fecha_hora, lugar, descripcion):
-    session = SessionLocal()
-    try:
-        a = Avistamiento(voluntario_id=voluntario_id, ave_id=ave_id,
-                         fecha_hora=fecha_hora, lugar=lugar,
-                         descripcion=descripcion or None)
-        session.add(a)
-        session.commit()
-        session.refresh(a)
-        return a.id
-    except Exception:
-        session.rollback()
-        return None
-    finally:
-        session.close()
+    a = Avistamiento(voluntario_id=voluntario_id, ave_id=ave_id, fecha_hora=fecha_hora, lugar=lugar, descripcion=descripcion or None)
+    return insert_in_DB(a)
 
 def create_registro(avistamiento_id, ruta_archivo, nombre_archivo):
-    session = SessionLocal()
-    try:
-        r = Registro(avistamiento_id=avistamiento_id,
-                     ruta_archivo=ruta_archivo,
-                     nombre_archivo=nombre_archivo)
-        session.add(r)
-        session.commit()
-        return True
-    except Exception:
-        session.rollback()
-        return False
-    finally:
-        session.close()
+    r = Registro(avistamiento_id=avistamiento_id, ruta_archivo=ruta_archivo, nombre_archivo=nombre_archivo)
+    return insert_in_DB(r) is not None
 
 def create_comentario(avistamiento_id, nombre, texto):
-    session = SessionLocal()
-    try:
-        c = Comentario(avistamiento_id=avistamiento_id, 
-                       nombre=nombre, texto=texto, 
-                       fecha_registro=datetime.now())
-        session.add(c)
-        session.commit()
-        session.refresh(c)
-        return c.id
-    except Exception:
-        session.rollback()
-        return None
-    finally:
-        session.close()
-   
+    c = Comentario(avistamiento_id=avistamiento_id, nombre=nombre, texto=texto, fecha_registro=datetime.now())
+    return insert_in_DB(c)
+
 # ------ Functions for data displaying -----
 def _con_relaciones(query):
     return query.options(joinedload(Avistamiento.ave),
