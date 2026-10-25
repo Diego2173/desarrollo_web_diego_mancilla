@@ -82,6 +82,14 @@ class Registro(Base):
     def es_video(self):
         return self.ruta_archivo.lower().rsplit(".", 1)[-1] in ("mp4", "mov")
 
+class Comentario(Base):
+    __tablename__ = "comentario"
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    nombre          = Column(String(80), nullable=False)
+    texto           = Column(String(300), nullable=False)
+    fecha           = Column(DateTime, nullable=False)
+    avistamiento_id = Column(Integer, ForeignKey("avistamiento.id"), nullable = False)
+
 # --- Database Functions ---
 # ------ get Functions ------
 def get_regiones():
@@ -118,6 +126,16 @@ def get_voluntario(id_):
     session = SessionLocal()
     try:
         return session.get(Voluntario, id_)
+    finally:
+        session.close()
+        
+def get_comentarios(avistamiento_id):
+    session = SessionLocal()
+    try:
+        return (session.query(Comentario)
+                .filter(Comentario.avistamiento_id == avistamiento_id)
+                .order_by(Comentario.fecha.desc(), Comentario.id,desc())
+                .all())
     finally:
         session.close()
 
@@ -168,8 +186,23 @@ def create_registro(avistamiento_id, ruta_archivo, nombre_archivo):
     finally:
         session.close()
 
+def create_comentario(avistamiento_id, nombre, texto):
+    session = SessionLocal()
+    try:
+        c = Comentario(avistamiento_id=avistamiento_id, 
+                       nombre=nombre, texto=texto, 
+                       fecha_registro=datetime.now())
+        session.add(c)
+        session.commit()
+        session.refresh(c)
+        return c.id
+    except Exception:
+        session.rollback()
+        return None
+    finally:
+        session.close()
+   
 # ------ Functions for data displaying -----
-
 def _con_relaciones(query):
     return query.options(joinedload(Avistamiento.ave),
                          joinedload(Avistamiento.voluntario),
