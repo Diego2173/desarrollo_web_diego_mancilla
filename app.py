@@ -45,10 +45,10 @@ def ave_del_dia(today=None):
     if ave is None:
         return None
     return {"ave": ave, "registro": db.get_registro_reciente_de_ave(ave.id)}
-
+ 
 def last_avistamientos(n=2):
     return db.get_last_avistamientos(n)
-
+ 
 @app.route("/")
 def index():
     return render_template("index.html", 
@@ -63,14 +63,17 @@ def api_comunas(rid):
     return jsonify([{"id": c.id, "nombre": c.nombre} for c in db.get_comuna(rid)])
  
 # -%-%-%- VOLUNTARIO -%-%-%-
-@app.route("/voluntarios", methods=["GET", "POST"])
+# -------- GET --------
+@app.route("/voluntarios", methods=["GET"])
 def new_voluntario():
-    if request.method == "GET":
-        return render_template("form/form_voluntarios.html",
-                               regiones = db.get_region(),
-                               errores = {}, datos = {}
-                               )
+    return render_template("form/form_voluntarios.html",
+                           regiones = db.get_region(),
+                           errores = {}, datos = {}
+                           )
  
+# -------- POST --------
+@app.route("/voluntarios", methods=["POST"])
+def create_voluntario():
     form    = request.form
     errores = {}
     
@@ -136,15 +139,18 @@ def voluntario_exito(vid):
     return render_template("successful/successfulRegistrationVoluntarios.html", voluntario=v)
  
 # -%-%-%- AVISTAMIENTO -%-%-%-
-@app.route("/avistamientos/nuevo", methods=["GET", "POST"])
+# -------- GET --------
+@app.route("/avistamientos/nuevo", methods=["GET"])
 def new_avistamiento():
-    if request.method == "GET":
-        return render_template("form/form_aves.html",
-                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
-                               preseleccion = request.args.get("voluntario_id") or session.get("voluntario_id"),
-                               errores={}, datos={}
-                               )
+    return render_template("form/form_aves.html",
+                           regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                           preseleccion = request.args.get("voluntario_id") or session.get("voluntario_id"),
+                           errores={}, datos={}
+                           )
  
+# -------- POST --------
+@app.route("/avistamientos/nuevo", methods=["POST"])
+def create_avistamiento():
     form    = request.form
     files   = [f for f in request.files.getlist("file") if f and f.filename]
     errores = {}
@@ -246,10 +252,10 @@ def avistamiento_exito(aid):
     if a is None:
         abort(404)
     return render_template("successful/successfulRegistrationAves.html", aves=a.ave)
-
+ 
 # -%-%-%- Listado -%-%-%-
 PER_PAGE = 5
-
+ 
 def leer_params_listado():
     page      = max(1, request.args.get("page", 1, type=int))
     ave_id    = request.args.get("ave", type=int)
@@ -293,27 +299,26 @@ def detalle(aid):
                            direccion = direccion
                            )
  
-@app.route("/voluntarios", methods=["GET", "POST"])
-def new_voluntario():
-    if request.method == "GET":
-
  # -%-%-%- Comentarios -%-%-%-
-@app.route("/avistamientos/<int:aid>/comentarios", methods=["GET", "POST"])
-def new_comentario(aid):
-    if request.method == "GET":
-        if db.get_avistamiento(aid) is None:
-            return jsonify({"ok": False, "errores": {"avistamiento": "El avistamiento no existe."}}), 404
-        
-        return jsonify(
-            [{"nombre": c.nombre,
-              "texto":  c.texto,
-              "fecha":  c.fecha.strftime("%d-%m-%Y %H:%M")
-              }
-              for c in db.get_comentarios(aid)])
-    
+# -------- GET --------
+@app.route("/avistamientos/<int:aid>/comentarios", methods=["GET"])
+def list_comentarios(aid):
     if db.get_avistamiento(aid) is None:
         return jsonify({"ok": False, "errores": {"avistamiento": "El avistamiento no existe."}}), 404
-    
+ 
+    return jsonify(
+        [{"nombre": c.nombre,
+          "texto":  c.texto,
+          "fecha":  c.fecha.strftime("%d-%m-%Y %H:%M")
+          }
+          for c in db.get_comentario(aid)])
+ 
+# -------- POST --------
+@app.route("/avistamientos/<int:aid>/comentarios", methods=["POST"])
+def create_comentario(aid):
+    if db.get_avistamiento(aid) is None:
+        return jsonify({"ok": False, "errores": {"avistamiento": "El avistamiento no existe."}}), 404
+ 
     nombre  = request.form.get("nombre")
     texto   = request.form.get("texto")
     errores = {}
@@ -328,8 +333,8 @@ def new_comentario(aid):
     cid = db.create_comentario(aid, nombre.strip(), texto.strip())
     if cid is None:
         return jsonify({"ok": False, "errores": {"db": "Error al guardar en la BD. Intenta de nuevo."}}), 500
-    
-    return jsonify({"ok": True}) 
+ 
+    return jsonify({"ok": True})
  
  
 @app.route("/estadisticas")
