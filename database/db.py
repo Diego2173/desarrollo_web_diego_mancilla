@@ -80,7 +80,7 @@ class Registro(Base):
         return self.ruta_archivo.lower().rsplit(".", 1)[-1] in ("mp4", "mov")
 
 class Comentario(Base):
-    __tablename__ = "comentario"
+    __tablename__   = "comentario"
     id              = Column(Integer, primary_key=True, autoincrement=True)
     nombre          = Column(String(80), nullable=False)
     texto           = Column(String(300), nullable=False)
@@ -159,7 +159,7 @@ def create_registro(avistamiento_id, ruta_archivo, nombre_archivo):
     return insert_in_DB(r) is not None
 
 def create_comentario(avistamiento_id, nombre, texto):
-    c = Comentario(avistamiento_id=avistamiento_id, nombre=nombre, texto=texto, fecha_registro=datetime.now())
+    c = Comentario(avistamiento_id=avistamiento_id, nombre=nombre, texto=texto, fecha=datetime.now())
     return insert_in_DB(c)
 
 # ------ Functions for data displaying -----

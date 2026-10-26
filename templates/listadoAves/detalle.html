@@ -4,7 +4,7 @@
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css')}}"
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css')}}">
 {% endblock %}
 
 {% block hero %}
@@ -65,7 +65,7 @@
     {% endif %}
 
     <h2>Comentarios</h2>
-    <!-- Agregar lógica de mostrar listado de comentarios-->
+   <ul id="lista-comentarios" class="comentarios"></ul>
 
     <h3>Agregar comentario</h3>
     <form id="formComentario" method="post" novalidate action="{{ url_for('create_comentario', aid=a.id) }}">
@@ -84,11 +84,12 @@
 
       <span class="error-message" id="comentario-error"></span>
       <button type="submit">Agregar comentario</button>
+    </form>
 
     <p><a class="volver" href="{{ url_for('listado', page=page, ave=ave_id, orden=orden, dir=direccion) }}">Volver al listado</a></p>
   </section>
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ url_for('static', filename='js/listadoAves/comentarios.js') }}">
+  <script src="{{ url_for('static', filename='js/listadoAves/comentarios.js') }}"></script>
 {% endblock scripts%}
