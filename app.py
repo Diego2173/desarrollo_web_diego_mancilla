@@ -34,7 +34,6 @@ def olvidar():
 def ave_del_dia(today=None):
     
     today = today or datetime.now().date()
-    
     n     = db.count_aves_con_registro()
     if not n:
         return None
@@ -68,9 +67,8 @@ def api_comunas(rid):
 def new_voluntario():
     if request.method == "GET":
         return render_template("form/form_voluntarios.html",
-                               regiones=db.get_region(),
-                               errores={},
-                               datos={}
+                               regiones = db.get_region(),
+                               errores = {}, datos = {}
                                )
  
     form    = request.form
@@ -107,13 +105,10 @@ def new_voluntario():
     if not val.validate_field(address, val.ADDR_RE, 1, 100):
         errores["address"] = "Dirección inválida (1–100 caracteres)."
  
-    
-
     if errores:
         return render_template("form/form_voluntarios.html",
-                               regiones=db.get_region(),
-                               errores=errores, 
-                               datos=form
+                               regiones = db.get_region(),
+                               errores = errores, datos = form
                                ), 400
  
     full_name = f"{name.strip()} {lastname.strip()}"
@@ -125,8 +120,7 @@ def new_voluntario():
     if vid is None:
         return render_template("form/form_voluntarios.html",
                                regiones=db.get_region(),
-                               errores={"db": "Error al guardar en la BD. Intenta de nuevo."},
-                               datos=form
+                               errores={"db": "Error al guardar en la BD. Intenta de nuevo."}, datos=form
                                ), 500
     
     # Recordar a voluntario (recién ingresado)
@@ -146,12 +140,9 @@ def voluntario_exito(vid):
 def new_avistamiento():
     if request.method == "GET":
         return render_template("form/form_aves.html",
-                               regiones=db.get_region(),
-                               aves=db.get_ave(),
-                               voluntarios=db.get_voluntarios(),
-                               preseleccion=request.args.get("voluntario_id") or session.get("voluntario_id"),
-                               errores={}, 
-                               datos={}
+                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                               preseleccion = request.args.get("voluntario_id") or session.get("voluntario_id"),
+                               errores={}, datos={}
                                )
  
     form    = request.form
@@ -190,15 +181,13 @@ def new_avistamiento():
  
     if errores:
         return render_template("form/form_aves.html",
-                               regiones=db.get_region(),
-                               aves=db.get_ave(),
-                               voluntarios=db.get_voluntarios(),
-                               preseleccion=form.get("voluntario_id"),
-                               errores=errores, 
-                               datos=form
+                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                               preseleccion = form.get("voluntario_id"),
+                               errores = errores, 
+                               datos = form
                                ), 400
  
-    # Verificar FKs (TEC-5)
+    # Verificar FKs
     try:
         voluntario_id = int(voluntario_id)
         ave_id        = int(ave_id)
@@ -209,26 +198,23 @@ def new_avistamiento():
  
     if db.get_voluntario(voluntario_id) is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_region(), aves=db.get_ave(),
-                               voluntarios=db.get_voluntarios(),
-                               errores={"voluntario_id": "Voluntario no existe."},
-                               datos=form), 400
+                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                               errores = {"voluntario_id": "Voluntario no existe."},
+                               datos = form), 400
  
     ave = next((a for a in db.get_ave() if a.id == ave_id), None)
     if ave is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_region(), aves=db.get_ave(),
-                               voluntarios=db.get_voluntarios(),
-                               errores={"ave_id": "Ave no existe."},
-                               datos=form), 400
+                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                               errores = {"ave_id": "Ave no existe."},
+                               datos = form), 400
  
     comuna = next((c for c in db.get_comuna(region_id) if c.id == comuna_id), None)
     if comuna is None:
         return render_template("form/form_aves.html",
-                               regiones=db.get_region(), aves=db.get_ave(),
-                               voluntarios=db.get_voluntarios(),
-                               errores={"select-comuna": "Comuna no válida."},
-                               datos=form), 400
+                               regiones = db.get_region(), aves = db.get_ave(), voluntarios = db.get_voluntarios(),
+                               errores = {"select-comuna": "Comuna no válida."},
+                               datos = form), 400
  
     region = next(r for r in db.get_region() if r.id == region_id)
     lugar  = f"{form['address'].strip()}, {comuna.nombre}, {region.nombre}"
@@ -261,7 +247,7 @@ def avistamiento_exito(aid):
         abort(404)
     return render_template("successful/successfulRegistrationAves.html", aves=a.ave)
 
-# -%-%-%- LISTADO -%-%-%-
+# -%-%-%- Listado -%-%-%-
 PER_PAGE = 5
 
 def leer_params_listado():
@@ -284,13 +270,13 @@ def listado():
         page = total_pages
     avistamientos = db.get_avistamientos_paginados(page, PER_PAGE, ave_id, orden, direccion)
     return render_template("listadoAves/listadoAves.html",
-                           avistamientos=avistamientos,
-                           aves=db.get_ave(),
-                           page=page,
-                           total_pages=total_pages,
-                           ave_id=ave_id,
-                           orden=orden,
-                           direccion=direccion
+                           avistamientos = avistamientos,
+                           aves = db.get_ave(),
+                           page = page,
+                           total_pages = total_pages,
+                           ave_id = ave_id,
+                           orden = orden,
+                           direccion = direccion
                            )
  
 @app.route("/avistamientos/<int:aid>")
@@ -300,12 +286,51 @@ def detalle(aid):
         abort(404)
     page, ave_id, orden, direccion = leer_params_listado()
     return render_template("listadoAves/detalle.html",
-                           a=a,
-                           page=page, 
-                           ave_id=ave_id,
-                           orden=orden,
-                           direccion=direccion
+                           a = a,
+                           page = page, 
+                           ave_id = ave_id,
+                           orden = orden,
+                           direccion = direccion
                            )
+ 
+@app.route("/voluntarios", methods=["GET", "POST"])
+def new_voluntario():
+    if request.method == "GET":
+
+ # -%-%-%- Comentarios -%-%-%-
+@app.route("/avistamientos/<int:aid>/comentarios", methods=["GET", "POST"])
+def new_comentario(aid):
+    if request.method == "GET":
+        if db.get_avistamiento(aid) is None:
+            return jsonify({"ok": False, "errores": {"avistamiento": "El avistamiento no existe."}}), 404
+        
+        return jsonify(
+            [{"nombre": c.nombre,
+              "texto":  c.texto,
+              "fecha":  c.fecha.strftime("%d-%m-%Y %H:%M")
+              }
+              for c in db.get_comentarios(aid)])
+    
+    if db.get_avistamiento(aid) is None:
+        return jsonify({"ok": False, "errores": {"avistamiento": "El avistamiento no existe."}}), 404
+    
+    nombre  = request.form.get("nombre")
+    texto   = request.form.get("texto")
+    errores = {}
+    if not val.validate_field(nombre, val.COMMENT_NAME_RE, 3, 50):
+        errores["nombre"] = "Nombre inválido (3–50 caracteres, una sola línea)."
+    if not val.validate_field(texto, val.COMMENT_TEXT_RE, 5, 300):
+        errores["texto"] = "Comentario inválido (5–300 caracteres)."
+ 
+    if errores:
+        return jsonify({"ok": False, "errores": errores}), 400
+ 
+    cid = db.create_comentario(aid, nombre.strip(), texto.strip())
+    if cid is None:
+        return jsonify({"ok": False, "errores": {"db": "Error al guardar en la BD. Intenta de nuevo."}}), 500
+    
+    return jsonify({"ok": True}) 
+ 
  
 @app.route("/estadisticas")
 def estadisticas():
