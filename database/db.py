@@ -1,4 +1,3 @@
--- Active: 1790892494608@@127.0.0.1@3306@tarea2
 from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Text, func, distinct, or_
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship,  joinedload, selectinload

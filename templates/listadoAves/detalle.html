@@ -4,6 +4,7 @@
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css')}}"
 {% endblock %}
 
 {% block hero %}
@@ -63,6 +64,31 @@
       <p>Este avistamiento no tiene archivos adjuntos.</p>
     {% endif %}
 
+    <h2>Comentarios</h2>
+    <!-- Agregar lógica de mostrar listado de comentarios-->
+
+    <h3>Agregar comentario</h3>
+    <form id="formComentario" method="post" novalidate action="{{ url_for('create_comentario', aid=a.id) }}">
+
+      <div class="field">
+        <label for="comentario-nombre">Nombre <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="comentario-nombre" name="nombre" minlength="3" required>
+        <span class="error-message" id="comentario-nombre-error"></span>
+      </div>
+
+      <div class="field">
+        <label for="comentario-texto">Comentario <span class="required" aria-hidden="true">*</span></label>
+        <textarea id="comentario-texto" name="texto" rows="3" cols="40" minlength="5" required></textarea>
+        <span class="error-message" id="comentario-texto-error"></span>
+      </div>
+
+      <span class="error-message" id="comentario-error"></span>
+      <button type="submit">Agregar comentario</button>
+
     <p><a class="volver" href="{{ url_for('listado', page=page, ave=ave_id, orden=orden, dir=direccion) }}">Volver al listado</a></p>
   </section>
 {% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/listadoAves/comentarios.js') }}">
+{% endblock scripts%}

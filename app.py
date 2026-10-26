@@ -299,7 +299,7 @@ def detalle(aid):
                            direccion = direccion
                            )
  
- # -%-%-%- Comentarios -%-%-%-
+# -%-%-%- Comentarios -%-%-%-
 # -------- GET --------
 @app.route("/avistamientos/<int:aid>/comentarios", methods=["GET"])
 def list_comentarios(aid):
