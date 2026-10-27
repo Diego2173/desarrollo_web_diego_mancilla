@@ -270,7 +270,7 @@ def leer_params_listado():
 @app.route("/avistamientos")
 def listado():
     page, ave_id, orden, direccion = leer_params_listado()
-    total = db.count_avistamientos()
+    total = db.count_avistamientos(ave_id)
     total_pages = max(1, (total + PER_PAGE - 1) // PER_PAGE)
     if page > total_pages:
         page = total_pages
