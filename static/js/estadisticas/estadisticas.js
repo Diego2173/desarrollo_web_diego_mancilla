@@ -1,4 +1,4 @@
-// Paleta de colores (tomada desde root en index.css
+// Paleta de colores (tomada desde root en index.css)
 const rootStyle       = getComputedStyle(document.documentElement);
 const primaryColor    = rootStyle.getPropertyValue("--primary-color").trim();
 const secondaryColor  = rootStyle.getPropertyValue("--secondary-color").trim();
@@ -14,86 +14,99 @@ const graphPalette = [
     secondaryColor, 
     accentColor2, 
     secondaryColor2, 
-    grayDarkColor, 
     grayLightColor
 ];
 
-// Función para actualizar (y "calcular") los indicadores (contadores)
-const uploadCounter = (elementId, value) => {
-    const element = document.getElementById(elementId);
-    element.textContent = value;
-};
-
-// Función para hacer agregación de un valor dada una llave 
-const countBy = (list, key, byMonth = true) => {
- 
-    if (!byMonth) {
-        const counts = {};
-        list.forEach(item => {
-            const value = item[key];
-            counts[value] = (counts[value] || 0) + 1;
-        });
-        return counts;
-    } else {
-        const counts = new Array(12).fill(0);
-        list.forEach(item => {
-            const [, month] = item.date.split("-"); // "2025-08-20" -> "08"
-            const monthIndex = parseInt(month, 10) - 1;
-            counts[monthIndex]++;
-        });
-        
-        const labels = nombresMeses;
-        const values = counts;
-        
-        return {labels, values};
+const getJSON = (url, callback) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "json";
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            callback(xhr.response);
+        }
     };
+    xhr.send();
 };
 
-window.onload = () => {
-    // Actualizar indicadores
-    uploadCounter("volunteer-counter", volunteerData.length);
-    uploadCounter("sighting-counter", sightingData.length);
+const indicators = document.querySelector(".indicators");
+getJSON(
+    indicators.dataset.url,
+    (data) => {
+        document.getElementById("volunteer-counter").textContent = data.voluntarios;
+        document.getElementById("sighting-counter").textContent = data.avistamientos;
+    }
+);
 
-    // Dibujar gráficos
-    // 1. Avistamientos por mes:
-    const {labels: monthLabels, values: monthValues} = countBy(sightingData, "date", true);
-    new Chart(document.getElementById("graph-sightings-by-month"), {
-        type: "bar",
-        data: {
-            labels: monthLabels,
-            datasets: [{
-                label: "Avistamientos",
-                data: monthValues,
-                backgroundColor: graphPalette[0],
-            }],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {display: false},
-            },
-            scales: {
-                y: {beginAtZero: true, ticks: {precision: 0}},
-            },
-        },
-    });
+const loadChart = (element, draw) => {
+    getJSON(
+        element.dataset.url,
+        (data) => {
+            if (data.length === 0) {
+                element.classList.add("-");
+                element.textContent = "-";
+                return;
+            }
+            draw(data);
+        }
+    );
+};
 
-    // 2. Voluntarios por región:
-    const volunteersByRegion = countBy(volunteerData, "region", false);
-    new Chart(document.getElementById("graph-volunteers-regions"), {
-        type: "pie",
-        data: {
-            labels: Object.keys(volunteersByRegion),
-            datasets: [{
-                data: Object.values(volunteersByRegion),
-                backgroundColor: graphPalette,
-            }],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {display: false},
-            },
-        },
+// 1. Avistamientos por día (líneas)
+const drawSightingsByDay = (data) => {
+    const points = data.map(d => [Date.parse(d.fecha), d.total]);
+ 
+    $.plot("#graph-sightings-by-day", [{ data: points, color: primaryColor }], {
+        series: { lines: { show: true }, points: { show: true } },
+        xaxis:  { mode: "time", timeformat: "%d-%m-%Y", minTickSize: [1, "day"], tickLength: 0 },
+        yaxis:  { min: 0, minTickSize: 1, tickDecimals: 0 },
+        grid:   { borderWidth: 1, borderColor: grayLightColor }
     });
 };
+
+ 
+// 2. Avistamientos por tipo de ave (torta)
+const drawSightingsByBird = (data) => {
+    const series = data.map(d => ({ label: d.ave, data: d.total }));
+ 
+    $.plot("#graph-sightings-by-bird", series, {
+        colors: graphPalette,
+        series: {
+            pie: {
+                show: true,
+                radius: 1,
+                label: {
+                    show: true,
+                    radius: 3 / 4,
+                    threshold: 0.05,
+                    formatter: (label, slice) => Math.round(slice.percent) + "%"
+                }
+            }
+        },  
+        legend: {
+            show: true,
+            container: "#legend-sightings-by-bird",
+            labelFormatter: (label, slice) => label + " (" + slice.data[0][1] + ")"
+        }
+    });
+};
+  
+// 3. Voluntarios por comuna (barras)
+const drawVolunteersByCommune = (data) => {
+    const points = data.map(d => [d.comuna, d.total]);
+ 
+    $.plot("#graph-volunteers-by-commune", [{ data: points, color: primaryColor }], {
+        series: { bars: { show: true, barWidth: 0.6, align: "center", fill: 1 } },
+        xaxis:  { mode: "categories", tickLength: 0 },
+        yaxis:  { min: 0, minTickSize: 1, tickDecimals: 0 },
+        grid:   { borderWidth: 1, borderColor: grayLightColor }
+    });
+};
+ 
+const sightingsByDay = document.getElementById("graph-sightings-by-day");
+const sightingsByBird = document.getElementById("graph-sightings-by-bird");
+const volunteersByCommune = document.getElementById("graph-volunteers-by-commune");
+
+loadChart(sightingsByDay, drawSightingsByDay);
+loadChart(sightingsByBird, drawSightingsByBird);
+loadChart(volunteersByCommune, drawVolunteersByCommune);
