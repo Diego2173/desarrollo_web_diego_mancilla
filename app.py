@@ -340,6 +340,32 @@ def create_comentario(aid):
 @app.route("/estadisticas")
 def estadisticas():
     return render_template("estadisticas/estadisticas.html")
+
+# Rutas para los indicadores
+@app.route("/api/estadisticas/indicadores")
+def api_indicadores():
+    return jsonify({
+        "voluntarios": db.count_voluntarios(),
+        "avistamientos": db.count_avistamientos()
+        })
+
+# Rutas para los gráficos
+@app.route("/api/estadisticas/avistamientos-por-dia")
+def api_avistamientos_por_dia():
+    return jsonify(
+        [{"fecha": str(dia), "total": total} for dia, total in db.count_avistamientos_por_dia()]
+        )
+@app.route("/api/estadisticas/avistamientos-por-ave")
+def api_avistamientos_por_ave():
+    return jsonify(
+        [{"ave": ave, "total": total} for ave, total in db.count_avistamientos_por_ave()]
+        )
+ 
+@app.route("/api/estadisticas/voluntarios-por-comuna")
+def api_voluntarios_por_comuna():
+    return jsonify(
+        [{"comuna": comuna, "total": total} for comuna, total in db.count_voluntarios_por_comuna()]
+        )
  
 if __name__ == "__main__": 
     app.run(debug=True)

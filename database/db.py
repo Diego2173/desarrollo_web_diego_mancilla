@@ -215,7 +215,48 @@ def get_avistamiento(id_):
 
     finally:
         session.close()
-        
+
+# --- Estadisticas ---
+def count_voluntarios():
+    session = SessionLocal()
+    try:
+        return session.query(func.count(Voluntario.id)).scalar()
+    finally:
+        session.close()
+            
+def count_avistamientos_por_dia():
+    session = SessionLocal()
+    try:
+        dia = func.date(Avistamiento.fecha_hora)
+        return (session.query(dia, func.count(Avistamiento.id))
+                              .group_by(dia)
+                              .order_by(dia)
+                              .all())
+    finally:
+        session.close()
+
+def count_avistamientos_por_ave():
+    session = SessionLocal()
+    try:
+        total = func.count(Avistamiento.id)
+        return (session.query(Ave.nombre, total)
+                .join(Avistamiento, Avistamiento.ave_id == Ave.id)               
+                .group_by(Ave.id, Ave.nombre)
+                .order_by(total.desc(), Ave.nombre)
+                .all())
+    finally:
+        session.close()
+
+def count_voluntarios_por_comuna():
+    session = SessionLocal()
+    try:
+        return (session.query(Comuna.nombre, func.count(Voluntario.id))
+                .join(Voluntario, Voluntario.comuna_id == Comuna.id)
+                .group_by(Comuna.id, Comuna.nombre)
+                .order_by(Comuna.nombre)
+                .all())
+    finally:
+        session.close()
 # ------ Ave del día ------
 # Note that aves_con_registro gets an ave that has at least a file asociated
 def count_aves_con_registro():

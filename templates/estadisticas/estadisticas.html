@@ -13,7 +13,7 @@
 
 {% block content %}
   <!-- section: indicadores-->
-   <div class="indicators">
+   <div class="indicators" data-url="{{ url_for('api_indicadores') }}">
       <article class="indicator">
           <h2 id="volunteer-counter">0</h2>
           <p>Voluntarios registrados</p>
@@ -27,21 +27,39 @@
 
   <!-- section: gráficos-->
   <div class="graphs">
-      <article class="graph-sightings-by-month">
-          <h2>Avistamientos de aves por mes</h2>
-          <canvas id="graph-sightings-by-month" role="img" aria-label="Gráfico de barras de avistamientos por mes"></canvas>
+      <article class="graph">
+          <h2>Avistamientos por día</h2>
+          <div id="graph-sightings-by-day" class="graph-area" role="img"
+               aria-label="Gráfico de líneas de avistamientos por día"
+               data-url="{{ url_for('api_avistamientos_por_dia') }}"></div>
       </article>
-          
-      <article class="graph-volunteers-regions">
-          <h2>Voluntarios por región</h2>
-          <canvas id="graph-volunteers-regions" role="img" aria-label="Gráfico de torta de voluntarios por región"></canvas>
+ 
+      <article class="graph">
+          <h2>Avistamientos por tipo de ave</h2>
+          <div id="graph-sightings-by-bird" class="graph-area" role="img"
+               aria-label="Gráfico de torta de avistamientos por tipo de ave"
+               data-url="{{ url_for('api_avistamientos_por_ave') }}"></div>
+          <div id="legend-sightings-by-bird" class="graph-legend"></div>
+      </article>
+ 
+      <article class="graph graph-wide">
+          <h2>Voluntarios por comuna</h2>
+          <div id="graph-volunteers-by-commune" class="graph-area" role="img"
+               aria-label="Gráfico de barras de voluntarios por comuna"
+               data-url="{{ url_for('api_voluntarios_por_comuna') }}"></div>
       </article>
   </div>
+
+  <p><a class="volver" href="{{ url_for('index') }}">Volver a la portada</a></p>
 {% endblock %}
 
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="{{ url_for('static', filename='js/dataConst.js') }}"></script>
-<script src="{{ url_for('static', filename='js/data.js') }}"></script>
+<!-- Cargar jQuery y Flot-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.time.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.categories.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.pie.js"></script>
+
 <script src="{{ url_for('static', filename='js/estadisticas/estadisticas.js') }}"></script>
 {% endblock %}
