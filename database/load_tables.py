@@ -17,6 +17,6 @@ def execute_file(route):
             cur.execute(s)
     conn.commit()
 
-execute_file("database/region-comuna.sql")
-execute_file("database/aves.sql")
+execute_file("database/tables/region-comuna.sql")
+execute_file("database/tables/aves.sql")
 conn.close()
