@@ -12,7 +12,6 @@ app.secret_key = "secret_key"
 app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
 app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024
 
-
 # -%-%-%- Sesión del voluntario -%-%-%-
 # En la cookie solo se guarda el id del voluntario ("voluntario_id"); el resto se lee de la BD.
 @app.context_processor
