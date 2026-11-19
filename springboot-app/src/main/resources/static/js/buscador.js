@@ -36,6 +36,31 @@ const createCell = (text, query) => {
     return cell;
 };
 
+const formatAverage = (average) => average === null ? "-" : average.toFixed(1);
+
+const evaluate = async (id, noteCell) => {
+    const value = prompt("Ingresa una nota del 1 al 7");
+    if (value === null) {
+        return;
+    }
+    try {
+        const response = await fetch(`/api/avistamientos/${id}/nota`, {
+            method: "POST",
+            body: new URLSearchParams({ nota: value })
+        });
+        if (response.status === 400) {
+            alert("La nota debe ser un número entero entre 1 y 7.");
+            return;
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        noteCell.textContent = formatAverage(await response.json());
+    } catch (error) {
+        alert("No se pudo guardar la nota. Intenta de nuevo.");
+    }
+};
+
 const createRow = (avistamiento, query) => {
 
     const row = document.createElement("tr");
@@ -48,8 +73,16 @@ const createRow = (avistamiento, query) => {
     row.append(createCell(avistamiento.comuna, query));
 
     const note = document.createElement("td");
-    note.textContent = avistamiento.promedio === null ? "-" : avistamiento.promedio.toFixed(1);
+    note.textContent = formatAverage(avistamiento.promedio);
     row.append(note);
+
+    const action = document.createElement("td");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Evaluar";
+    button.addEventListener("click", () => evaluate(avistamiento.id, note));
+    action.append(button);
+    row.append(action);
     return row;
 };
 
