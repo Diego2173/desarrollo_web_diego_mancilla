@@ -1,0 +1,119 @@
+:root {
+    --black-color: #00170c;
+    --white-color: #f7fdfa;
+    --primary-color: #2f5233;
+    --accent-color-1: #e6772e;
+    --gray-dark-color: #5c6b60;
+    --gray-light-color: #e2e5e3;
+    --radius: 10px;
+    --space: 1.5rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, Arial, sans-serif;
+    color: var(--black-color);
+    background-color: var(--white-color);
+    line-height: 1.5;
+}
+
+header {
+    padding: var(--space);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space) 1rem;
+}
+
+/* Formulario con un único input */
+#buscador label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+#buscador input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    border: 2px solid var(--gray-light-color);
+    border-radius: var(--radius);
+}
+
+#buscador input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Mensaje (sin resultados o error) */
+#message {
+    min-height: 1.5rem;
+    margin: 1rem 0;
+    color: var(--gray-dark-color);
+}
+
+/* Tabla de resultados */
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+caption {
+    padding: 0.5rem 0;
+    font-weight: 700;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--gray-light-color);
+    text-align: left;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+/* Texto que calza con lo buscado */
+mark {
+    padding: 0 0.1em;
+    background-color: var(--accent-color-1);
+    color: var(--white-color);
+    border-radius: 3px;
+}
+
+/* Botón Evaluar */
+td button {
+    padding: 0.35rem 0.8rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--accent-color-1);
+    color: var(--white-color);
+    font: inherit;
+    cursor: pointer;
+}
+
+td button:hover,
+td button:focus-visible {
+    background-color: var(--primary-color);
+}
