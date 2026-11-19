@@ -12,15 +12,16 @@ import com.tarea4.tarea4.models.AvistamientoResultado;
 public interface AvistamientoRepository extends CrudRepository<Avistamiento, Integer> {
 
     @Query("""
-select new com.tarea4.tarea4.models.AvistamientoResultado(
-a.id, v.nombre, a.fechaHora, av.nombre, c.nombre)
+select new com.tarea4.tarea4.models.AvistamientoResultado(a.id, v.nombre, a.fechaHora, av.nombre, c.nombre, avg(n.nota))
 from Avistamiento a
 join a.ave av
 join a.voluntario v
 join v.comuna c
+left join Nota n on n.avistamiento = a
 where lower(av.nombre) like lower(concat('%', :q, '%')) escape '!'
     or lower(v.nombre)  like lower(concat('%', :q, '%')) escape '!'
     or lower(c.nombre)  like lower(concat('%', :q, '%')) escape '!'
+group by a.id, v.nombre, a.fechaHora, av.nombre, c.nombre
 order by a.fechaHora desc, a.id desc
 """)
     List<AvistamientoResultado> search(@Param("q") String q);

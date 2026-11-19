@@ -46,6 +46,10 @@ const createRow = (avistamiento, query) => {
     row.append(day);
     row.append(createCell(avistamiento.ave, query));
     row.append(createCell(avistamiento.comuna, query));
+
+    const note = document.createElement("td");
+    note.textContent = avistamiento.promedio === null ? "-" : avistamiento.promedio.toFixed(1);
+    row.append(note);
     return row;
 };
 

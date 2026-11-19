@@ -7,5 +7,6 @@ public record AvistamientoResultado(
         String voluntario,
         LocalDateTime fechaHora,
         String ave,
-        String comuna) {
+        String comuna,
+        Double promedio) {
 }
