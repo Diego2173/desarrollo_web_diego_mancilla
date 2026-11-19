@@ -12,6 +12,8 @@ public class Avistamiento {
 
     private LocalDateTime fechaHora;
 
+    private String lugar;
+
     @ManyToOne
     @JoinColumn(name = "ave_id")
     private Ave ave;
@@ -29,6 +31,10 @@ public class Avistamiento {
 
     public LocalDateTime getFechaHora() {
         return fechaHora;
+    }
+
+    public String getLugar() {
+        return lugar;
     }
 
     public Ave getAve() {
